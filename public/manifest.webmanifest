@@ -1,0 +1,19 @@
+{
+  "name": "SIDRO | Carmita Villegas",
+  "short_name": "SIDRO",
+  "description": "Reserva y administra tus citas en Carmita Villegas.",
+  "lang": "es",
+  "theme_color": "#4b1e3a",
+  "background_color": "#fffaf7",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "a8f7a518-54ab-4d33-9d93-e98ca5b0b987.ico",
+      "sizes": "any",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ]
+}

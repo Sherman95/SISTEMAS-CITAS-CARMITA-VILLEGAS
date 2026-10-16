@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+.mobile-container {
+  margin: 0;
+  max-width: none;
+  min-height: 100vh;
+  padding: 0;
+  width: 100%;
+}
+
+.showcase-note {
+  color: rgba(255, 255, 255, 0.58) !important;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+  position: relative;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.mobile-brand {
+  color: var(--brand-base);
+  display: none;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.submit-button {
+  margin-top: 0.4rem;
+  width: 100%;
+}
+
+.button-spinner {
+  animation: spin 700ms linear infinite;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  border-top-color: #fff;
+  height: 18px;
+  width: 18px;
+}
+
+.alert svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.8;
+}
+
+@media (max-width: 800px) {
+  .mobile-brand {
+    display: block;
+  }
+}
