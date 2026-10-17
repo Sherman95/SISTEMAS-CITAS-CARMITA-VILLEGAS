@@ -23,9 +23,19 @@ describe('BookingService', () => {
     const request = http.expectOne(
       (req) => req.url.endsWith('/api/sidro/availability')
     );
-    expect(request.request.params.get('service_id')).toBe('service-uuid');
+    expect(request.request.params.get('service_ids')).toBe('service-uuid');
     expect(request.request.params.get('employee_id')).toBe('employee-uuid');
     expect(request.request.params.get('request_date')).toBe('2026-10-16');
+    request.flush([]);
+  });
+
+  it('requests professionals compatible with every selected service', () => {
+    service.getProfessionalsForServices(['service-1', 'service-2']).subscribe();
+
+    const request = http.expectOne(
+      (req) => req.url.endsWith('/api/sidro/public/professionals')
+    );
+    expect(request.request.params.get('service_ids')).toBe('service-1,service-2');
     request.flush([]);
   });
 

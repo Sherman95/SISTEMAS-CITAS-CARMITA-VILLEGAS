@@ -1,0 +1,682 @@
+:host {
+  display: block;
+}
+
+.luxury-dashboard {
+  background: #f8f3ef;
+  width: min(100%, 1240px);
+}
+
+.dashboard-topbar {
+  align-items: center;
+  background: rgba(248, 243, 239, 0.9);
+  border-bottom: 1px solid rgba(90, 32, 63, 0.09);
+  display: flex;
+  justify-content: space-between;
+  margin: -0.35rem -0.25rem 1.25rem;
+  padding: 0.35rem 0.25rem 0.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.dashboard-brand,
+.profile-access {
+  align-items: center;
+  display: inline-flex;
+  text-decoration: none;
+}
+
+.dashboard-brand {
+  gap: 0.65rem;
+}
+
+.dashboard-logo {
+  background: #e9c2c0;
+  border: 1px solid rgba(90, 32, 63, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 7px 18px rgba(50, 18, 37, 0.1);
+  display: grid;
+  height: 42px;
+  overflow: hidden;
+  padding: 2px;
+  place-items: center;
+  width: 42px;
+}
+
+.dashboard-logo img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.dashboard-brand > span:last-child,
+.profile-copy {
+  display: grid;
+  line-height: 1;
+}
+
+.dashboard-brand strong {
+  color: var(--brand-dark);
+  font-family: var(--font-heading);
+  font-size: 1.14rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+}
+
+.dashboard-brand small {
+  color: var(--text-secondary);
+  font-size: 0.48rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+}
+
+.profile-access {
+  color: var(--brand-base);
+  gap: 0.55rem;
+}
+
+.profile-copy {
+  display: none;
+  text-align: right;
+}
+
+.profile-copy small {
+  color: var(--text-secondary);
+  font-size: 0.56rem;
+}
+
+.profile-copy strong {
+  font-size: 0.72rem;
+  margin-top: 0.2rem;
+}
+
+.profile-avatar {
+  align-items: center;
+  background: var(--brand-base);
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(90, 32, 63, 0.18);
+  color: #fff;
+  display: flex;
+  font-size: 0.68rem;
+  font-weight: 850;
+  height: 43px;
+  justify-content: center;
+  width: 43px;
+}
+
+.dashboard-content {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.dashboard-loading,
+.dashboard-error {
+  align-items: center;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: center;
+  min-height: 60svh;
+  text-align: center;
+}
+
+.dashboard-loading p,
+.dashboard-error p {
+  margin: 0;
+}
+
+.dashboard-error {
+  color: var(--error);
+}
+
+.dashboard-error svg {
+  fill: none;
+  height: 38px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+  width: 38px;
+}
+
+.dashboard-hero {
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  color: #fff;
+  min-height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dashboard-hero > img {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: 67% center;
+  position: absolute;
+  width: 100%;
+}
+
+.hero-overlay {
+  background:
+    linear-gradient(180deg, rgba(41, 16, 31, 0.13) 15%, rgba(41, 16, 31, 0.91) 100%),
+    linear-gradient(90deg, rgba(41, 16, 31, 0.45), transparent 70%);
+  inset: 0;
+  position: absolute;
+}
+
+.dashboard-hero-copy {
+  bottom: 0;
+  left: 0;
+  padding: 1.45rem;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.greeting {
+  color: #edbed1;
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+}
+
+.dashboard-hero h1 {
+  color: #fff;
+  font-size: clamp(2.55rem, 12vw, 4.3rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 0.96;
+  margin: 0 0 0.85rem;
+}
+
+.dashboard-hero h1 em {
+  color: #efbfd2;
+  font-weight: 400;
+}
+
+.dashboard-hero-copy p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  margin-bottom: 1.1rem;
+  max-width: 430px;
+}
+
+.hero-cta {
+  align-items: center;
+  background: #fff;
+  border-radius: 13px;
+  color: var(--brand-base);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 850;
+  gap: 0.55rem;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.75rem 1.15rem;
+  text-decoration: none;
+}
+
+.hero-cta svg,
+.hero-location svg,
+.notice-icon svg,
+.action-icon svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.hero-cta svg {
+  height: 17px;
+  width: 17px;
+}
+
+.hero-location {
+  align-items: center;
+  background: rgba(41, 16, 31, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.61rem;
+  font-weight: 760;
+  gap: 0.35rem;
+  padding: 0.45rem 0.65rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+}
+
+.hero-location svg {
+  height: 14px;
+  width: 14px;
+}
+
+.linking-notice {
+  align-items: flex-start;
+  background: #f1e9df;
+  border: 1px solid #e1d1c2;
+  border-radius: 16px;
+  color: #6c4e35;
+  display: flex;
+  gap: 0.75rem;
+  margin-top: -1.35rem;
+  padding: 0.95rem;
+}
+
+.notice-icon {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.68);
+  border-radius: 50%;
+  display: flex;
+  flex: 0 0 auto;
+  height: 35px;
+  justify-content: center;
+  width: 35px;
+}
+
+.notice-icon svg {
+  height: 17px;
+  width: 17px;
+}
+
+.linking-notice strong {
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 0.2rem;
+}
+
+.linking-notice p {
+  font-size: 0.7rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.section-header {
+  align-items: flex-end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.section-kicker {
+  color: var(--brand-accent);
+  display: block;
+  font-size: 0.61rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  margin-bottom: 0.45rem;
+  text-transform: uppercase;
+}
+
+.section-header h2,
+.booking-ritual h2 {
+  color: var(--brand-dark);
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 500;
+  margin: 0;
+}
+
+.section-header > a {
+  color: var(--brand-base);
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 820;
+  padding-bottom: 0.3rem;
+  text-decoration: none;
+}
+
+.service-rail {
+  display: grid;
+  gap: 0.85rem;
+  grid-auto-columns: minmax(245px, 78vw);
+  grid-auto-flow: column;
+  margin-left: calc(-1 * max(1rem, env(safe-area-inset-left)));
+  margin-right: calc(-1 * max(1rem, env(safe-area-inset-right)));
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 0.1rem max(1rem, env(safe-area-inset-right)) 0.8rem max(1rem, env(safe-area-inset-left));
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+}
+
+.service-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.service-tile {
+  color: inherit;
+  min-width: 0;
+  scroll-snap-align: start;
+  text-decoration: none;
+}
+
+.service-tile figure {
+  border-radius: 20px;
+  height: 285px;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.service-tile figure::after {
+  background: linear-gradient(180deg, transparent 55%, rgba(41, 16, 31, 0.52));
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.service-tile figure img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.2, 0, 0, 1);
+  width: 100%;
+}
+
+.service-number {
+  bottom: 0.8rem;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  left: 0.85rem;
+  position: absolute;
+  z-index: 2;
+}
+
+.service-tile-copy {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.6rem;
+  justify-content: space-between;
+  padding: 0.85rem 0.15rem 0;
+}
+
+.service-tile-copy h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem;
+}
+
+.service-tile-copy span {
+  color: var(--text-secondary);
+  display: block;
+  font-size: 0.64rem;
+}
+
+.service-tile-copy > strong {
+  color: var(--brand-base);
+  flex: 0 0 auto;
+  font-size: 0.76rem;
+  padding-top: 0.25rem;
+}
+
+.action-layout {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.editorial-action {
+  align-items: center;
+  border-radius: 20px;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 132px;
+  overflow: hidden;
+  padding: 1.15rem;
+  position: relative;
+  text-decoration: none;
+}
+
+.primary-action {
+  background: var(--brand-base);
+  color: #fff;
+}
+
+.secondary-action {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.action-index {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  position: absolute;
+  right: 1rem;
+  top: 0.8rem;
+}
+
+.primary-action .action-index {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.secondary-action .action-index {
+  color: var(--brand-rose);
+}
+
+.action-icon {
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+.primary-action .action-icon {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.secondary-action .action-icon {
+  background: var(--brand-blush);
+  color: var(--brand-base);
+}
+
+.action-icon svg {
+  height: 22px;
+  width: 22px;
+}
+
+.editorial-action h3 {
+  color: inherit;
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin: 0 0 0.3rem;
+}
+
+.editorial-action p {
+  font-size: 0.68rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.primary-action p {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.secondary-action p {
+  color: var(--text-secondary);
+}
+
+.action-arrow {
+  font-size: 1rem;
+}
+
+.booking-ritual {
+  border-bottom: 1px solid var(--border-strong);
+  border-top: 1px solid var(--border-strong);
+  padding: 2.5rem 0;
+}
+
+.booking-ritual ol {
+  list-style: none;
+  margin: 1.8rem 0 0;
+  padding: 0;
+}
+
+.booking-ritual li {
+  align-items: center;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 34px minmax(0, 1fr);
+  padding: 0.9rem 0;
+}
+
+.booking-ritual li > span {
+  color: var(--brand-accent);
+  font-family: var(--font-heading);
+}
+
+.booking-ritual li p {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  margin: 0;
+}
+
+.booking-ritual li strong {
+  color: var(--text-primary);
+}
+
+@media (min-width: 520px) {
+  .profile-copy {
+    display: grid;
+  }
+
+  .dashboard-hero-copy {
+    padding: 2rem;
+  }
+
+  .service-rail {
+    grid-auto-columns: minmax(270px, 44vw);
+  }
+}
+
+@media (min-width: 780px) {
+  .dashboard-content {
+    gap: 3.5rem;
+  }
+
+  .dashboard-hero {
+    min-height: 540px;
+  }
+
+  .dashboard-hero-copy {
+    padding: 3rem;
+  }
+
+  .dashboard-hero h1 {
+    font-size: clamp(3.8rem, 7vw, 5.8rem);
+  }
+
+  .hero-cta {
+    min-width: 180px;
+  }
+
+  .service-rail {
+    gap: 1rem;
+    grid-auto-columns: unset;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .service-tile figure {
+    height: clamp(260px, 31vw, 390px);
+  }
+
+  .action-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .editorial-action {
+    min-height: 168px;
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1020px) {
+  .dashboard-topbar {
+    margin-bottom: 1.75rem;
+  }
+
+  .dashboard-hero {
+    min-height: 590px;
+  }
+
+  .dashboard-hero > img {
+    object-position: center;
+  }
+
+  .hero-overlay {
+    background: linear-gradient(90deg, rgba(41, 16, 31, 0.88) 0%, rgba(41, 16, 31, 0.28) 62%, transparent 100%);
+  }
+
+  .dashboard-hero-copy {
+    bottom: auto;
+    left: 0;
+    max-width: 650px;
+    padding: 4rem;
+    right: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .booking-ritual {
+    align-items: start;
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: minmax(300px, 0.8fr) minmax(450px, 1.2fr);
+    padding: 3.5rem 0;
+  }
+
+  .booking-ritual ol {
+    margin-top: 0;
+  }
+}
+
+@media (hover: hover) {
+  .hero-cta,
+  .editorial-action,
+  .service-tile {
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .hero-cta:hover,
+  .editorial-action:hover {
+    transform: translateY(-3px);
+  }
+
+  .service-tile:hover figure img {
+    transform: scale(1.035);
+  }
+}
+
+@media (max-width: 390px) {
+  .dashboard-brand small {
+    display: none;
+  }
+
+  .dashboard-hero {
+    min-height: 470px;
+  }
+}

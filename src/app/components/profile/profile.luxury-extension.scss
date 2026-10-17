@@ -1,0 +1,39 @@
+:host { display: block; }
+
+.mobile-container { background: #fbf6f2; }
+.profile-topbar { background: rgba(251,246,242,.92); border-color: rgba(90,32,63,.08); }
+.profile-topbar .brand-mark { background: linear-gradient(145deg, #efcbc8, #c98694); border-radius: 11px; box-shadow: 0 7px 18px rgba(74,28,49,.13); }
+.profile-topbar .brand-copy strong { color: #4a2132; font-family: var(--font-heading); font-size: .88rem; letter-spacing: .1em; text-transform: uppercase; }
+.profile-topbar .brand-copy small { color: #8f6d78; font-size: .43rem; letter-spacing: .24em; text-transform: uppercase; }
+.page-header .eyebrow { color: #a24b67; letter-spacing: .16em; }
+.page-header h1 { color: #321723; font-size: clamp(2.8rem,7vw,5rem); letter-spacing: -.045em; }
+
+.profile-identity {
+  background: #45172c;
+  border-radius: 26px;
+  min-height: 420px;
+}
+
+.identity-cover { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; z-index: 0; }
+.identity-shade { background: linear-gradient(0deg, rgba(46,14,34,.96) 0%, rgba(56,16,34,.64) 54%, rgba(46,14,34,.18) 100%); inset: 0; position: absolute; z-index: 1; }
+.profile-identity > *:not(.identity-cover):not(.identity-shade) { z-index: 2; }
+.profile-avatar { background: rgba(255,255,255,.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.link-status { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.profile-details { background: rgba(255,255,255,.82); border: 1px solid rgba(117,74,88,.1); border-radius: 26px; box-shadow: 0 16px 38px rgba(62,24,40,.08); }
+.details-heading h2 { color: #3b202c; }
+.protected-label { background: #e6f4ed; }
+.profile-note { background: #f2eaf1; color: #6f3452; }
+.logout-button { border-radius: 999px; min-height: 50px; }
+
+@media (max-width: 760px) {
+  .profile-identity { min-height: 340px; }
+}
+
+@media (max-width: 520px) {
+  .page-header h1 { font-size: clamp(2.45rem,12vw,3.6rem); }
+  .profile-identity { display: flex; flex-direction: column; justify-content: flex-end; min-height: 340px; padding: 1.35rem; text-align: center; }
+  .profile-avatar { height: 76px; margin: auto 0 .9rem; width: 76px; }
+  .profile-identity h2 { font-size: 1.55rem; }
+  .link-status { align-self: center; grid-column: auto; margin-top: .9rem; }
+  .profile-details { border-radius: 22px; }
+}

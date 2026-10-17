@@ -99,3 +99,119 @@
     width: 100%;
   }
 }
+
+/* Adaptive app navigation */
+.mobile-nav {
+  background: rgba(255, 253, 250, 0.96);
+  border-color: rgba(213, 199, 193, 0.88);
+  border-radius: 22px 22px 0 0;
+  bottom: 0;
+  box-shadow: 0 -10px 34px rgba(46, 14, 34, 0.11);
+  padding:
+    0.5rem
+    max(0.65rem, env(safe-area-inset-right))
+    max(0.5rem, env(safe-area-inset-bottom))
+    max(0.65rem, env(safe-area-inset-left));
+  width: min(100%, 620px);
+}
+
+.mobile-nav .nav-item {
+  border-radius: 14px;
+  font-size: 0.62rem;
+  font-weight: 780;
+  gap: 0.18rem;
+  min-height: 56px;
+  padding: 0.32rem 0.2rem;
+  position: relative;
+}
+
+.mobile-nav .nav-item.active::before {
+  background: var(--brand-accent);
+  border-radius: var(--radius-pill);
+  content: "";
+  height: 3px;
+  left: 50%;
+  position: absolute;
+  top: -0.5rem;
+  transform: translateX(-50%);
+  width: 28px;
+}
+
+@media (min-width: 621px) {
+  .mobile-nav {
+    border-radius: 22px;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    box-shadow: 0 18px 48px rgba(46, 14, 34, 0.15);
+    padding: 0.48rem;
+    width: min(calc(100% - 2rem), 620px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .mobile-nav {
+    bottom: auto;
+    flex-direction: column;
+    gap: 0.25rem;
+    left: max(1.25rem, calc((100vw - 1180px) / 2 - 88px));
+    padding: 0.55rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+  }
+
+  .mobile-nav .nav-item {
+    flex: 0 0 auto;
+    min-height: 65px;
+    width: 100%;
+  }
+
+  .mobile-nav .nav-item.active::before {
+    height: 30px;
+    left: -0.55rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+  }
+}
+
+@media (max-width: 620px) {
+  .mobile-nav {
+    background: rgba(255, 253, 250, 0.97);
+    border-color: rgba(90, 32, 63, 0.12);
+    border-radius: 22px 22px 0 0;
+  }
+
+  .mobile-nav .nav-item {
+    background: transparent;
+  }
+
+  .mobile-nav .nav-item.active {
+    background: transparent;
+    color: var(--brand-base);
+  }
+
+  .mobile-nav .nav-item:nth-child(2) .nav-icon {
+    background: var(--brand-base);
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 9px 24px rgba(90, 32, 63, 0.27);
+    color: #fff;
+    height: 43px;
+    margin-top: -1rem;
+    width: 43px;
+  }
+
+  .mobile-nav .nav-item:nth-child(2) .nav-icon svg {
+    height: 21px;
+    width: 21px;
+  }
+
+  .mobile-nav .nav-item:nth-child(2) > span:last-child {
+    color: var(--brand-base);
+    font-weight: 850;
+  }
+
+  .mobile-nav .nav-item:nth-child(2).active::before {
+    display: none;
+  }
+}

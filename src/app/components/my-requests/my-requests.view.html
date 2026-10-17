@@ -1,8 +1,8 @@
 <div class="mobile-container requests-page">
   <header class="requests-topbar">
     <a class="brand-lockup" routerLink="/dashboard" aria-label="SIDRO, inicio">
-      <span class="brand-mark" aria-hidden="true"><img src="a8f7a518-54ab-4d33-9d93-e98ca5b0b987.ico" alt=""></span>
-      <span class="brand-copy"><strong>SIDRO</strong><small>Carmita Villegas</small></span>
+      <span class="brand-mark" aria-hidden="true"><img [src]="visuals.brandLogo" alt=""></span>
+      <span class="brand-copy"><strong>Carmita Villegas</strong><small>Estilistas · SIDRO</small></span>
     </a>
   </header>
 
@@ -48,13 +48,16 @@
     </div>
 
     <section *ngIf="!isLoading && filteredRequests.length > 0" class="requests-list" aria-label="Listado de solicitudes">
-      <article *ngFor="let request of filteredRequests" class="request-card surface-card">
+      <article *ngFor="let request of filteredRequests; let index = index" class="request-card surface-card">
         <div class="request-card-header">
           <div class="service-heading">
-            <span class="service-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l2 5-6 13L6 8l2-5Z"/><path d="M6 8h12M9 8l3 13 3-13"/></svg>
+            <span class="request-service-photo">
+              <img [src]="getRequestImage(request, index)" [alt]="'Referencia visual para ' + (request.service_name || 'servicio SIDRO')">
             </span>
-            <div><span class="request-label">Servicio</span><h2>{{ request.service_name || 'Servicio SIDRO' }}</h2></div>
+            <div>
+              <span class="request-label">{{ (request.services?.length || 0) > 1 ? 'Servicios' : 'Servicio' }}</span>
+              <h2>{{ request.service_name || 'Servicio SIDRO' }}</h2>
+            </div>
           </div>
           <span class="status-badge" [ngClass]="statusClass(request.status)">{{ formatStatus(request.status) }}</span>
         </div>

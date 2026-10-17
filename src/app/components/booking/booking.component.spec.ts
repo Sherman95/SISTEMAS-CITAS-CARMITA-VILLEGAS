@@ -13,11 +13,13 @@ describe('BookingComponent', () => {
     bookingService = jasmine.createSpyObj<BookingService>('BookingService', [
       'getServices',
       'getProfessionals',
+      'getProfessionalsForServices',
       'getAvailability',
       'createRequest'
     ]);
     bookingService.getServices.and.returnValue(of([]));
     bookingService.getProfessionals.and.returnValue(of([]));
+    bookingService.getProfessionalsForServices.and.returnValue(of([]));
     bookingService.getAvailability.and.returnValue(of([]));
     bookingService.createRequest.and.returnValue(of({
       service_id: 'service-uuid',
@@ -70,6 +72,32 @@ describe('BookingComponent', () => {
 
     expect(bookingService.createRequest).not.toHaveBeenCalled();
     expect(component.errorMessage).toContain('al menos 10 caracteres');
+  });
+
+  it('allows selecting more than one service and sends all service ids', () => {
+    const first = {
+      id: 'service-1', nombre: 'Corte', precio: 15,
+      duration_minutes: 30, padding_minutes: 0
+    };
+    const second = {
+      id: 'service-2', nombre: 'Manicure', precio: 20,
+      duration_minutes: 60, padding_minutes: 0
+    };
+    component.selectService(first);
+    component.selectService(second);
+    component.selectedProfessional = { employee_id: 'employee-uuid', nombre: 'Profesional' };
+    component.selectedDate = '2026-10-16';
+    component.selectedSlot = '10:00';
+    component.clientNotes = 'Quiero ambos servicios con acabado natural.';
+
+    component.submitRequest();
+
+    expect(component.selectedServices.length).toBe(2);
+    expect(component.selectedServicesTotal).toBe(35);
+    expect(bookingService.createRequest).toHaveBeenCalledWith(jasmine.objectContaining({
+      service_id: 'service-1',
+      service_ids: ['service-1', 'service-2']
+    }));
   });
 
   it('sends normalized client notes with the booking request', () => {

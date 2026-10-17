@@ -21,6 +21,21 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
+  requestPasswordReset(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/password/forgot`, { email });
+  }
+
+  resetPassword(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/password/reset`, { token, password });
+  }
+
+  updateRecoveryEmail(email: string, currentPassword: string): Observable<{ email: string; message: string }> {
+    return this.http.put<{ email: string; message: string }>(`${this.apiUrl}/profile/recovery-email`, {
+      email,
+      current_password: currentPassword
+    });
+  }
+
   getProfile(): Observable<any> {
     return this.http.get(`${this.apiUrl}/profile`);
   }

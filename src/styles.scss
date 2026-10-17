@@ -723,6 +723,144 @@ button:disabled,
   }
 }
 
+/* SIDRO booking flow */
+app-booking .booking-page .booking-topbar {
+  background: rgba(247, 243, 239, 0.88);
+  border-bottom: 1px solid rgba(231, 221, 216, 0.72);
+  margin-left: -0.35rem;
+  margin-right: -0.35rem;
+  padding: 0.35rem;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+app-booking .booking-page .close-link {
+  min-height: 44px;
+  text-decoration: none;
+}
+
+app-booking .booking-page .booking-steps button {
+  min-height: 54px;
+  min-width: 0;
+}
+
+app-booking .booking-page .booking-panel {
+  box-shadow: var(--shadow-md);
+}
+
+app-booking .booking-page .selection-copy strong {
+  line-height: 1.25;
+}
+
+app-booking .booking-page .slot-grid button {
+  min-height: 50px;
+}
+
+app-booking .booking-page .date-field input {
+  color-scheme: light;
+}
+
+@media (max-width: 650px) {
+  app-booking .booking-page.booking-page {
+    padding-left: max(0.8rem, env(safe-area-inset-left));
+    padding-right: max(0.8rem, env(safe-area-inset-right));
+  }
+
+  app-booking .booking-page .booking-topbar {
+    margin-bottom: 1.35rem;
+  }
+
+  app-booking .booking-page .page-header {
+    margin-bottom: 1.15rem;
+  }
+
+  app-booking .booking-page .page-header h1 {
+    font-size: clamp(2.25rem, 12vw, 3.35rem);
+  }
+
+  app-booking .booking-page .booking-steps {
+    background: rgba(255, 253, 250, 0.94);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
+    padding: 0.65rem 0.55rem;
+    position: sticky;
+    top: 68px;
+    z-index: 25;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  app-booking .booking-page .booking-steps button {
+    flex: 0 0 54px;
+    gap: 0.25rem;
+  }
+
+  app-booking .booking-page .booking-steps button > span {
+    height: 30px;
+    width: 30px;
+  }
+
+  app-booking .booking-page .booking-steps button small {
+    display: block;
+    font-size: 0.56rem;
+  }
+
+  app-booking .booking-page .booking-steps i {
+    margin: 0 0.2rem 1.1rem;
+  }
+
+  app-booking .booking-page .booking-panel {
+    border-radius: 20px;
+    padding: 1.15rem;
+  }
+
+  app-booking .booking-page .step-heading {
+    gap: 0.7rem;
+    margin-bottom: 1.25rem;
+  }
+
+  app-booking .booking-page .selection-copy strong {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  app-booking .booking-page .step-actions {
+    background: rgba(255, 253, 250, 0.96);
+    border-top: 1px solid var(--border);
+    bottom: calc(4.55rem + env(safe-area-inset-bottom));
+    margin: 1.5rem -0.4rem -0.4rem;
+    padding: 0.85rem 0.4rem 0.4rem;
+    position: sticky;
+    z-index: 15;
+  }
+
+  app-booking .booking-page .appointment-notes small {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  app-booking .booking-page .appointment-notes textarea {
+    min-height: 150px;
+  }
+}
+
+@media (max-width: 370px) {
+  app-booking .booking-page .booking-steps button {
+    flex-basis: 48px;
+  }
+
+  app-booking .booking-page .booking-steps button small {
+    font-size: 0.52rem;
+  }
+}
+
 /* Editorial brand refinement — Carmita Villegas, Piñas */
 :root {
   --brand-base: #5a203f;
@@ -846,4 +984,138 @@ body {
 .auth-showcase .brand-mark {
   background: #eac4c1;
   border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Mobile-first product polish */
+:root {
+  --surface-raised: #ffffff;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --shadow-sm: 0 5px 18px rgba(50, 29, 41, 0.06);
+  --shadow-md: 0 16px 40px rgba(50, 29, 41, 0.1);
+  --shadow-lg: 0 28px 68px rgba(45, 18, 34, 0.15);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 100% 0, rgba(234, 210, 220, 0.42), transparent 27rem),
+    var(--bg-primary);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(189, 27, 107, 0.28);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--brand-rose);
+  color: var(--brand-dark);
+}
+
+.mobile-container {
+  padding:
+    max(1rem, env(safe-area-inset-top))
+    max(1rem, env(safe-area-inset-right))
+    calc(6.9rem + env(safe-area-inset-bottom))
+    max(1rem, env(safe-area-inset-left));
+  width: min(100%, 1180px);
+}
+
+.page-header p {
+  line-height: 1.65;
+}
+
+.glass-panel,
+.surface-card {
+  background: rgba(255, 253, 250, 0.94);
+  border-color: rgba(215, 200, 194, 0.78);
+}
+
+input,
+select,
+textarea {
+  background: var(--surface-raised);
+  min-height: 52px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background: #fff;
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 4px rgba(189, 27, 107, 0.1);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-danger {
+  border-radius: 12px;
+  min-height: 52px;
+}
+
+.btn-primary {
+  background: var(--brand-base);
+  box-shadow: 0 9px 22px rgba(90, 32, 63, 0.17);
+}
+
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled),
+.btn-ghost:active:not(:disabled),
+.btn-danger:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .btn-primary:hover:not(:disabled) {
+    background: var(--brand-plum);
+    box-shadow: 0 12px 28px rgba(90, 32, 63, 0.22);
+  }
+}
+
+@media (max-width: 800px) {
+  .auth-main {
+    align-items: center;
+    padding:
+      max(1rem, env(safe-area-inset-top))
+      max(1rem, env(safe-area-inset-right))
+      max(1.5rem, env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+  }
+
+  .auth-card {
+    background: rgba(255, 253, 250, 0.78);
+    border: 1px solid rgba(231, 221, 216, 0.82);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 601px) {
+  .mobile-container {
+    padding-left: clamp(1.5rem, 4vw, 2.5rem);
+    padding-right: clamp(1.5rem, 4vw, 2.5rem);
+    padding-top: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

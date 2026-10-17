@@ -1,0 +1,99 @@
+<div class="luxury-welcome">
+  <nav class="welcome-nav" aria-label="Navegación principal">
+    <a class="luxury-brand" routerLink="/" aria-label="SIDRO, inicio">
+      <span class="brand-emblem" aria-hidden="true">
+        <img [src]="visuals.brandLogo" alt="">
+      </span>
+      <span class="brand-words">
+        <strong>SIDRO</strong>
+        <small>Carmita Villegas Estilistas</small>
+      </span>
+    </a>
+
+    <a class="nav-access" routerLink="/login">
+      <span>Ingresar</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </nav>
+
+  <main class="welcome-main">
+    <section class="welcome-hero" aria-labelledby="welcome-title">
+      <div class="hero-copy">
+        <span class="hero-kicker">Carmita Villegas · Piñas, El Oro</span>
+        <h1 id="welcome-title">Belleza que se siente <em>tuya.</em></h1>
+        <p class="hero-intro">
+          Reserva tu próxima experiencia de cuidado con la calma, la atención y el detalle que mereces.
+        </p>
+
+        <div class="hero-actions">
+          <a class="hero-primary" routerLink="/register">
+            Crear mi cuenta
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="hero-secondary" routerLink="/login">Iniciar sesión</a>
+        </div>
+
+        <dl class="hero-assurances" aria-label="Beneficios de SIDRO">
+          <div>
+            <dt>01</dt>
+            <dd>Horarios disponibles</dd>
+          </div>
+          <div>
+            <dt>02</dt>
+            <dd>Solicitud en minutos</dd>
+          </div>
+          <div>
+            <dt>03</dt>
+            <dd>Seguimiento personal</dd>
+          </div>
+        </dl>
+      </div>
+
+      <figure class="hero-media">
+        <img
+          [src]="visuals.welcomeHero"
+          alt="Ambiente editorial de un salón de belleza en tonos vino y crema"
+        >
+        <figcaption>
+          <span class="media-monogram">CV</span>
+          <span>
+            <small>Una pausa para ti</small>
+            <strong>Tu momento empieza aquí</strong>
+          </span>
+        </figcaption>
+        <span class="media-index" aria-hidden="true">01 — 03</span>
+      </figure>
+    </section>
+
+    <section class="welcome-signature" aria-labelledby="signature-title">
+      <div class="signature-heading">
+        <span>Nuestra forma de cuidarte</span>
+        <h2 id="signature-title">Simple para reservar.<br>Especial al vivirlo.</h2>
+      </div>
+
+      <ol class="signature-steps">
+        <li>
+          <span>01</span>
+          <div>
+            <h3>Elige tu servicio</h3>
+            <p>Explora el catálogo disponible directamente desde el salón.</p>
+          </div>
+        </li>
+        <li>
+          <span>02</span>
+          <div>
+            <h3>Encuentra tu horario</h3>
+            <p>Consulta la agenda y selecciona el momento ideal para ti.</p>
+          </div>
+        </li>
+        <li>
+          <span>03</span>
+          <div>
+            <h3>Recibe confirmación</h3>
+            <p>Sigue tu solicitud y cualquier propuesta desde tu cuenta.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+  </main>
+</div>

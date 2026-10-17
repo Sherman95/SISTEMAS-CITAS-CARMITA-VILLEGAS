@@ -382,3 +382,93 @@
     display: grid;
   }
 }
+
+/* Refined first impression */
+.welcome-nav {
+  background: rgba(247, 243, 239, 0.88);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-login {
+  min-height: 44px;
+  align-items: center;
+  display: inline-flex;
+}
+
+.hero-actions a {
+  min-height: 54px;
+}
+
+.studio-card {
+  border-radius: 2px 24px 2px 2px;
+}
+
+.studio-link {
+  min-height: 44px;
+}
+
+@media (max-width: 680px) {
+  .welcome-page {
+    padding:
+      0
+      max(1rem, env(safe-area-inset-right))
+      max(2rem, env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+  }
+
+  .welcome-nav {
+    min-height: 72px;
+  }
+
+  .welcome-hero {
+    gap: 2.75rem;
+    min-height: 0;
+    padding: 2.75rem 0 3.5rem;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.75rem, 14.5vw, 4.1rem);
+    letter-spacing: -0.05em;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    gap: 0.65rem;
+    margin-top: 1.65rem;
+  }
+
+  .hero-notes {
+    gap: 0.65rem;
+    margin-top: 1.15rem;
+  }
+
+  .studio-card {
+    border-radius: 2px 20px 2px 2px;
+    min-height: 430px;
+  }
+
+  .studio-card h2 {
+    font-size: clamp(2rem, 10vw, 2.75rem);
+  }
+
+  .benefit-grid article {
+    gap: 0.8rem;
+    grid-template-columns: 34px minmax(0, 1fr);
+    padding: 1.25rem 0.25rem;
+  }
+}
+
+@media (hover: hover) {
+  .hero-actions a:hover,
+  .studio-link:hover {
+    transform: translateY(-2px);
+  }
+}

@@ -21,12 +21,25 @@
 }
 
 .mobile-brand {
+  align-items: center;
   color: var(--brand-base);
   display: none;
   font-family: var(--font-heading);
-  font-size: 1.35rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  gap: 0.45rem;
+  letter-spacing: 0.08em;
   text-decoration: none;
+}
+
+.mobile-brand img {
+  background: #eac4c1;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  height: 34px;
+  object-fit: contain;
+  padding: 2px;
+  width: 34px;
 }
 
 .submit-button {
@@ -52,6 +65,14 @@
 
 @media (max-width: 800px) {
   .mobile-brand {
-    display: block;
+    display: inline-flex;
+  }
+
+  .auth-topbar {
+    margin-bottom: 1.75rem;
+  }
+
+  .auth-card h2 {
+    font-size: clamp(2.2rem, 11vw, 3.35rem);
   }
 }

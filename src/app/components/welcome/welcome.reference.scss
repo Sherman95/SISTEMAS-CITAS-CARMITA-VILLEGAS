@@ -1,0 +1,231 @@
+:host { display: block; }
+
+.welcome-page {
+  background: radial-gradient(circle at 14% 10%, rgba(216, 162, 172, .2), transparent 28rem), #472231;
+  color: var(--brand-dark);
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+.welcome-frame {
+  background: #fbf5f1;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: max(1.15rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) max(1.3rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+  position: relative;
+}
+
+.welcome-photo {
+  height: 71%;
+  inset: 0 0 auto auto;
+  object-fit: cover;
+  object-position: 61% center;
+  position: absolute;
+  width: 100%;
+  z-index: -3;
+}
+
+.photo-veil {
+  background: linear-gradient(90deg, #fbf5f1 0%, rgba(251,245,241,.96) 24%, rgba(251,245,241,.34) 64%, rgba(251,245,241,.08) 100%), linear-gradient(0deg, #fbf5f1 0%, rgba(251,245,241,.95) 12%, transparent 50%);
+  inset: 0;
+  position: absolute;
+  z-index: -2;
+}
+
+.welcome-frame::before,
+.welcome-frame::after {
+  background: rgba(226,177,184,.3);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.welcome-frame::before { height: 220px; left: -105px; top: 53%; width: 220px; }
+.welcome-frame::after { bottom: -130px; height: 265px; right: -120px; width: 265px; }
+
+.welcome-brand {
+  align-items: center;
+  display: inline-flex;
+  gap: .7rem;
+  position: relative;
+  width: fit-content;
+  z-index: 2;
+}
+
+.brand-emblem {
+  background: linear-gradient(145deg, #efcbc8, #c98694);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 11px;
+  box-shadow: 0 9px 24px rgba(74,28,49,.16);
+  display: grid;
+  height: 48px;
+  overflow: hidden;
+  padding: 2px;
+  place-items: center;
+  width: 48px;
+}
+
+.brand-emblem img { height: 100%; object-fit: contain; width: 100%; }
+.brand-words { display: grid; line-height: .85; }
+
+.brand-words strong {
+  color: #4a2132;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.brand-words small {
+  color: #8f6d78;
+  font-size: .44rem;
+  font-weight: 800;
+  letter-spacing: .35em;
+  margin-top: .42rem;
+  text-transform: uppercase;
+}
+
+.welcome-copy {
+  margin-top: clamp(6.3rem, 20vh, 11.5rem);
+  max-width: min(72%, 340px);
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  color: #a24b67;
+  display: block;
+  font-size: .57rem;
+  font-weight: 850;
+  letter-spacing: .18em;
+  margin-bottom: .65rem;
+  text-transform: uppercase;
+}
+
+.welcome-copy h1 {
+  color: #451c2d;
+  font-size: clamp(2.85rem, 13vw, 4.2rem);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  line-height: .93;
+  margin: 0;
+}
+
+.welcome-copy p {
+  color: #604c53;
+  font-size: .79rem;
+  line-height: 1.65;
+  margin: 1rem 0 0;
+  max-width: 270px;
+}
+
+.welcome-benefits {
+  display: grid;
+  gap: .72rem;
+  list-style: none;
+  margin: clamp(2.2rem, 5.6vh, 4.2rem) 0 1.25rem;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-benefits li { align-items: center; color: #45373c; display: flex; font-size: .7rem; font-weight: 650; gap: .68rem; }
+
+.benefit-icon {
+  align-items: center;
+  background: rgba(244,218,218,.86);
+  border-radius: 50%;
+  color: #7a2946;
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+.benefit-icon svg,
+.primary-action svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.benefit-icon svg { height: 15px; width: 15px; }
+
+.welcome-dots { align-items: center; display: flex; gap: .55rem; justify-content: center; margin: auto 0 1.2rem; }
+.welcome-dots span { background: #ddc9c8; border-radius: 50%; height: 6px; width: 6px; }
+.welcome-dots .active { background: #7b173c; }
+.welcome-actions { display: grid; gap: .68rem; position: relative; z-index: 2; }
+
+.primary-action,
+.secondary-action {
+  align-items: center;
+  border-radius: 999px;
+  display: flex;
+  font-size: .76rem;
+  font-weight: 820;
+  justify-content: center;
+  min-height: 53px;
+  padding: .75rem 1.35rem;
+  text-decoration: none;
+}
+
+.primary-action { background: linear-gradient(110deg, #67102f, #971844); box-shadow: 0 13px 28px rgba(103,16,47,.2); color: #fff; gap: .65rem; }
+.primary-action svg { height: 17px; width: 17px; }
+.secondary-action { border: 1px solid rgba(116,35,62,.56); color: #67223c; }
+
+.botanical-line {
+  bottom: 6.6rem;
+  fill: none;
+  left: -1rem;
+  opacity: .28;
+  position: absolute;
+  stroke: #b77c8a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1;
+  width: 150px;
+  z-index: 0;
+}
+
+@media (min-width: 760px) {
+  .welcome-page { align-items: center; display: flex; justify-content: center; padding: 2rem; }
+  .welcome-frame {
+    border-radius: 38px;
+    box-shadow: 0 35px 90px rgba(30,10,20,.34);
+    display: grid;
+    grid-template-columns: minmax(360px,.82fr) minmax(420px,1.18fr);
+    grid-template-rows: auto 1fr auto;
+    max-width: 1240px;
+    min-height: min(820px, calc(100svh - 4rem));
+    padding: 2.4rem 3.2rem;
+    width: 100%;
+  }
+  .welcome-photo { height: 100%; width: 61%; }
+  .photo-veil { background: linear-gradient(90deg, #fbf5f1 0%, #fbf5f1 36%, rgba(251,245,241,.28) 67%, transparent 100%); }
+  .welcome-brand { grid-column: 1; }
+  .welcome-copy { align-self: center; grid-column: 1; margin-top: 2.5rem; max-width: 480px; }
+  .welcome-copy h1 { font-size: clamp(4.2rem, 6vw, 6.4rem); }
+  .welcome-copy p { font-size: .94rem; max-width: 380px; }
+  .welcome-benefits { align-self: end; grid-column: 1; margin: 1.8rem 0 1rem; }
+  .welcome-actions { bottom: 2.8rem; position: absolute; right: 3rem; width: min(320px, 28vw); }
+  .welcome-dots { bottom: 1.2rem; margin: 0; position: absolute; right: calc(3rem + min(160px, 14vw)); }
+}
+
+@media (hover: hover) {
+  .primary-action,
+  .secondary-action { transition: transform var(--transition), box-shadow var(--transition), background var(--transition); }
+  .primary-action:hover,
+  .secondary-action:hover { transform: translateY(-2px); }
+  .secondary-action:hover { background: rgba(255,255,255,.52); }
+}
+
+@media (max-height: 720px) and (max-width: 759px) {
+  .welcome-copy { margin-top: 3.6rem; }
+  .welcome-benefits { margin-top: 1.3rem; }
+  .welcome-dots { margin-bottom: .65rem; }
+  .primary-action,
+  .secondary-action { min-height: 48px; }
+}

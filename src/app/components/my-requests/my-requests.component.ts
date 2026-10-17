@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { BookingService, SidroRequest } from '../../services/booking.service';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 import { RouterLink } from '@angular/router';
+import { VisualAssetsService } from '../../services/visual-assets.service';
 
 @Component({
   selector: 'app-my-requests',
   standalone: true,
   imports: [CommonModule, RouterLink, MobileNavComponent],
   templateUrl: './my-requests.view.html',
-  styleUrl: './my-requests.view.scss'
+  styleUrls: ['./my-requests.view.scss', './my-requests.luxury-extension.scss']
 })
 export class MyRequestsComponent implements OnInit {
   isLoading = true;
@@ -20,6 +21,8 @@ export class MyRequestsComponent implements OnInit {
   filter: 'ALL' | 'ACTIVE' | 'COMPLETED' = 'ALL';
   
   private bookingService = inject(BookingService);
+  readonly visualAssets = inject(VisualAssetsService);
+  readonly visuals = this.visualAssets.assets;
 
   ngOnInit() {
     this.loadRequests();
@@ -130,5 +133,15 @@ export class MyRequestsComponent implements OnInit {
 
   formatTime(value: string | null | undefined): string {
     return value?.slice(0, 5) || '--:--';
+  }
+
+  getRequestImage(request: SidroRequest, index = 0): string {
+    const primaryService = request.services?.[0];
+    const primaryServiceName = primaryService?.service_name || request.service_name || 'Servicio SIDRO';
+    return this.visualAssets.resolveServiceImage(
+      primaryServiceName,
+      primaryService?.image_url || request.image_url,
+      index
+    );
   }
 }

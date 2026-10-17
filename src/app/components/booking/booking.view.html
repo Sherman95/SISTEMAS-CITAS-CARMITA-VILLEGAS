@@ -1,8 +1,8 @@
 <div class="mobile-container booking-page">
   <header class="booking-topbar">
     <a class="brand-lockup" routerLink="/dashboard" aria-label="SIDRO, inicio">
-      <span class="brand-mark" aria-hidden="true"><img src="a8f7a518-54ab-4d33-9d93-e98ca5b0b987.ico" alt=""></span>
-      <span class="brand-copy"><strong>SIDRO</strong><small>Carmita Villegas</small></span>
+      <span class="brand-mark" aria-hidden="true"><img [src]="visuals.brandLogo" alt=""></span>
+      <span class="brand-copy"><strong>Carmita Villegas</strong><small>Estilistas · SIDRO</small></span>
     </a>
     <a class="close-link" routerLink="/dashboard" aria-label="Cerrar reserva">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
@@ -25,7 +25,7 @@
         <small>Servicio</small>
       </button>
       <i></i>
-      <button type="button" [class.active]="step === 2" [class.complete]="step > 2" [disabled]="!selectedService" (click)="step = 2">
+      <button type="button" [class.active]="step === 2" [class.complete]="step > 2" [disabled]="selectedServices.length === 0" (click)="setStep(2)">
         <span>{{ step > 2 ? '✓' : '2' }}</span>
         <small>Profesional</small>
       </button>
@@ -51,7 +51,7 @@
         <div *ngIf="step === 1" class="step-panel">
           <div class="step-heading">
             <span class="step-label">01</span>
-            <div><h2>¿Qué servicio deseas?</h2><p>Selecciona una opción para ver sus profesionales.</p></div>
+            <div><h2>¿Qué servicios deseas?</h2><p>Puedes elegir uno o varios. Buscaremos una profesional que realice todos.</p></div>
           </div>
 
           <div *ngIf="isLoading" class="loading-state compact" role="status">
@@ -69,14 +69,15 @@
 
           <div *ngIf="!isLoading && services.length > 0" class="service-grid">
             <button
-              *ngFor="let service of services"
+              *ngFor="let service of services; let index = index"
               type="button"
               class="selection-card service-card"
-              [class.selected]="selectedService?.id === service.id"
+              [class.selected]="isServiceSelected(service)"
+              [attr.aria-pressed]="isServiceSelected(service)"
               (click)="selectService(service)"
             >
-              <span class="selection-symbol">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l2 5-6 13L6 8l2-5Z"/><path d="M6 8h12M9 8l3 13 3-13"/></svg>
+              <span class="service-photo">
+                <img [src]="getServiceImage(service, index)" [alt]="'Referencia visual para ' + service.nombre">
               </span>
               <span class="selection-copy">
                 <strong>{{ service.nombre }}</strong>
@@ -88,8 +89,8 @@
           </div>
 
           <div class="step-actions single-action">
-            <button type="button" class="btn-primary" [disabled]="!selectedService" (click)="continueToProfessionals()">
-              Elegir profesional <span aria-hidden="true">→</span>
+            <button type="button" class="btn-primary" [disabled]="selectedServices.length === 0" (click)="continueToProfessionals()">
+              Elegir profesional<span *ngIf="selectedServices.length > 0"> · {{ selectedServices.length }}</span> <span aria-hidden="true">→</span>
             </button>
           </div>
         </div>
@@ -97,7 +98,7 @@
         <div *ngIf="step === 2" class="step-panel">
           <div class="step-heading">
             <span class="step-label">02</span>
-            <div><h2>Elige a tu profesional</h2><p>Estas profesionales atienden el servicio seleccionado.</p></div>
+            <div><h2>Elige a tu profesional</h2><p>Estas profesionales pueden realizar todos los servicios seleccionados.</p></div>
           </div>
 
           <div *ngIf="isLoading" class="loading-state compact" role="status">
@@ -105,7 +106,7 @@
           </div>
 
           <div *ngIf="!isLoading && professionals.length === 0" class="empty-state compact">
-            <p>No hay profesionales disponibles para este servicio.</p>
+            <p>No hay una profesional configurada para realizar juntos todos estos servicios.</p>
           </div>
 
           <div *ngIf="!isLoading" class="professional-grid">
@@ -124,7 +125,7 @@
 
           <div class="step-actions">
             <button type="button" class="btn-secondary" (click)="step = 1">Atrás</button>
-            <button type="button" class="btn-primary" [disabled]="!selectedProfessional" (click)="step = 3">
+            <button type="button" class="btn-primary" [disabled]="!selectedProfessional" (click)="setStep(3)">
               Elegir horario <span aria-hidden="true">→</span>
             </button>
           </div>
@@ -170,7 +171,7 @@
 
           <div class="step-actions">
             <button type="button" class="btn-secondary" (click)="step = 2">Atrás</button>
-            <button type="button" class="btn-primary" [disabled]="!selectedDate || !selectedSlot" (click)="step = 4">
+            <button type="button" class="btn-primary" [disabled]="!selectedDate || !selectedSlot" (click)="setStep(4)">
               Revisar reserva <span aria-hidden="true">→</span>
             </button>
           </div>
@@ -205,13 +206,20 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
             </div>
             <div class="confirmation-title">
-              <span>Tu solicitud</span><strong>{{ selectedService?.nombre }}</strong>
+              <span>Tu solicitud</span><strong>{{ selectedServicesLabel }}</strong>
             </div>
+            <ul class="confirmation-services" aria-label="Servicios seleccionados">
+              <li *ngFor="let service of selectedServices">
+                <span>{{ service.nombre }}</span>
+                <strong>{{ service.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+              </li>
+            </ul>
             <dl>
               <div><dt>Profesional</dt><dd>{{ selectedProfessional?.nombre }}</dd></div>
               <div><dt>Fecha</dt><dd>{{ formatSelectedDate() }}</dd></div>
               <div><dt>Hora</dt><dd>{{ formatTime(selectedSlot) }}</dd></div>
-              <div><dt>Valor</dt><dd>{{ selectedService?.precio | currency:'USD':'symbol':'1.2-2' }}</dd></div>
+              <div><dt>Duración estimada</dt><dd>{{ formatDuration(selectedServicesDuration) }}</dd></div>
+              <div><dt>Valor total</dt><dd>{{ selectedServicesTotal | currency:'USD':'symbol':'1.2-2' }}</dd></div>
               <div class="notes-review"><dt>Lo que deseas</dt><dd>{{ clientNotes.trim() || 'Describe lo que deseas hacerte.' }}</dd></div>
             </dl>
           </div>
@@ -231,17 +239,55 @@
         </div>
       </section>
 
-      <aside class="booking-summary" *ngIf="selectedService">
+      <aside class="booking-summary" *ngIf="selectedServices.length > 0">
+        <figure class="summary-photo">
+          <img [src]="getServiceImage(selectedServices[0])" [alt]="'Referencia visual para ' + selectedServices[0].nombre">
+        </figure>
         <span class="eyebrow">Tu selección</span>
-        <h2>{{ selectedService.nombre }}</h2>
-        <div class="summary-row"><span>Duración</span><strong>{{ formatDuration(selectedService.duration_minutes) }}</strong></div>
+        <h2>{{ selectedServicesLabel }}</h2>
+        <ol class="summary-services">
+          <li *ngFor="let service of selectedServices; let index = index">
+            <span>{{ index + 1 | number:'2.0' }}</span>
+            <strong>{{ service.nombre }}</strong>
+          </li>
+        </ol>
+        <div class="summary-row"><span>Duración estimada</span><strong>{{ formatDuration(selectedServicesDuration) }}</strong></div>
         <div class="summary-row"><span>Profesional</span><strong>{{ selectedProfessional?.nombre || 'Por elegir' }}</strong></div>
         <div class="summary-row"><span>Fecha</span><strong>{{ selectedDate ? formatSelectedDate() : 'Por elegir' }}</strong></div>
         <div class="summary-row"><span>Hora</span><strong>{{ selectedSlot ? formatTime(selectedSlot) : 'Por elegir' }}</strong></div>
-        <div class="summary-total"><span>Valor referencial</span><strong>{{ selectedService.precio | currency:'USD':'symbol':'1.2-2' }}</strong></div>
+        <div class="summary-total"><span>Valor referencial</span><strong>{{ selectedServicesTotal | currency:'USD':'symbol':'1.2-2' }}</strong></div>
       </aside>
     </div>
   </main>
+
+  <div
+    *ngIf="(step === 1 && selectedServices.length > 0) || (step === 2 && selectedProfessional) || (step === 3 && selectedDate && selectedSlot)"
+    class="mobile-next-action"
+    aria-label="Continuar con la reserva"
+  >
+    <div *ngIf="step === 1 && selectedServices.length > 0" class="mobile-selection-copy">
+      <span>{{ selectedServicesLabel }}</span>
+      <small>{{ selectedServicesTotal | currency:'USD':'symbol':'1.2-2' }} · {{ formatDuration(selectedServicesDuration) }}</small>
+    </div>
+    <div *ngIf="step === 2 && selectedProfessional" class="mobile-selection-copy">
+      <span>{{ selectedProfessional.nombre }}</span>
+      <small>Profesional seleccionada</small>
+    </div>
+    <div *ngIf="step === 3 && selectedSlot" class="mobile-selection-copy">
+      <span>{{ formatTime(selectedSlot) }}</span>
+      <small>{{ formatSelectedDate() }}</small>
+    </div>
+
+    <button *ngIf="step === 1" type="button" (click)="continueToProfessionals()">
+      Elegir profesional <span aria-hidden="true">→</span>
+    </button>
+    <button *ngIf="step === 2" type="button" (click)="setStep(3)">
+      Elegir horario <span aria-hidden="true">→</span>
+    </button>
+    <button *ngIf="step === 3" type="button" (click)="setStep(4)">
+      Revisar <span aria-hidden="true">→</span>
+    </button>
+  </div>
 
   <app-mobile-nav></app-mobile-nav>
 </div>

@@ -4,21 +4,27 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { BookingService, SidroService } from '../../services/booking.service';
+import { VisualAssetsService } from '../../services/visual-assets.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink, MobileNavComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './dashboard.reference.html',
+  styleUrls: ['./dashboard.reference.scss', './dashboard.mobile-fixes.scss']
 })
 export class DashboardComponent implements OnInit {
   profile: any = null;
   isLoading = true;
   errorMessage = '';
+  featuredServices: SidroService[] = [];
 
   private authService = inject(AuthService);
+  private bookingService = inject(BookingService);
   private router = inject(Router);
+  readonly visualAssets = inject(VisualAssetsService);
+  readonly visuals = this.visualAssets.assets;
 
   get firstName(): string {
     return this.profile?.nombre_completo?.trim().split(/\s+/)[0] || 'bienvenida';
@@ -30,6 +36,8 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadFeaturedServices();
+
     this.authService.getProfile().subscribe({
       next: (data) => {
         this.profile = data;
@@ -42,6 +50,22 @@ export class DashboardComponent implements OnInit {
            this.authService.logout();
            this.router.navigate(['/login']);
         }
+      }
+    });
+  }
+
+  getServiceImage(service: SidroService, index: number): string {
+    return this.visualAssets.resolveServiceImage(service.nombre, service.image_url, index);
+  }
+
+  private loadFeaturedServices(): void {
+    this.bookingService.getServices().subscribe({
+      next: (services) => {
+        this.featuredServices = services.slice(0, 3);
+      },
+      error: () => {
+        // El dashboard sigue disponible aunque el catálogo público esté temporalmente fuera de línea.
+        this.featuredServices = [];
       }
     });
   }

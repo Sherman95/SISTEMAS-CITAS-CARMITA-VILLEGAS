@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { VisualAssetsService } from '../../services/visual-assets.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink, CommonModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  templateUrl: './login.reference.html',
+  styleUrls: ['./login.reference.scss']
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -19,6 +20,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  readonly visuals = inject(VisualAssetsService).assets;
 
   constructor() {
     this.loginForm = this.fb.group({
