@@ -139,6 +139,24 @@ form { display: grid; gap: 1.12rem; min-width: 0; width: 100%; }
 .login-alert svg { flex: 0 0 auto; height: 18px; width: 18px; }
 .login-alert p { font-size: .68rem; line-height: 1.45; margin: 0; }
 
+.recovery-action {
+  align-items: center;
+  background: rgba(240, 216, 223, .48);
+  border: 1px solid #e8c7d1;
+  border-radius: 13px;
+  color: #67102f;
+  display: flex;
+  font-size: .68rem;
+  font-weight: 820;
+  gap: .65rem;
+  justify-content: space-between;
+  line-height: 1.4;
+  padding: .78rem .9rem;
+  text-decoration: none;
+}
+.recovery-action svg { flex: 0 0 auto; height: 17px; width: 17px; }
+.recovery-action:hover { background: rgba(240, 216, 223, .78); }
+
 .login-submit {
   align-items: center;
   background: linear-gradient(110deg, #67102f, #971844);

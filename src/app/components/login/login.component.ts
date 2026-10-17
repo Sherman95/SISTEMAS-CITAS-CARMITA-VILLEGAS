@@ -16,6 +16,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
+  showRecoveryPrompt = false;
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
@@ -24,12 +25,15 @@ export class LoginComponent {
 
   constructor() {
     this.loginForm = this.fb.group({
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(160)]],
       password: ['', Validators.required]
     });
   }
 
   onSubmit() {
+    const normalizedEmail = String(this.loginForm.controls['email'].value || '').trim().toLowerCase();
+    this.loginForm.controls['email'].setValue(normalizedEmail, { emitEvent: false });
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -37,10 +41,12 @@ export class LoginComponent {
 
     this.isLoading = true;
     this.errorMessage = '';
+    this.showRecoveryPrompt = false;
 
-    const { telefono, password } = this.loginForm.value;
+    const email = normalizedEmail;
+    const password = this.loginForm.value.password;
 
-    this.authService.login(telefono, password).subscribe({
+    this.authService.login(email, password).subscribe({
       next: (res) => {
         this.isLoading = false;
         // Se define y almacena el token en memoria para evitar XSS temporalmente,
@@ -50,7 +56,10 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.error || 'Error al iniciar sesión.';
+        this.showRecoveryPrompt = err.status === 401 || err.status === 403;
+        this.errorMessage = this.showRecoveryPrompt
+          ? 'El correo o la contraseña no coinciden.'
+          : err.error?.error || 'No pudimos iniciar sesión en este momento.';
       }
     });
   }

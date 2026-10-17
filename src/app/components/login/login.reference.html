@@ -24,18 +24,18 @@
       <div class="login-intro">
         <span>Tu espacio personal</span>
         <h1 id="login-title">Bienvenida<br>de nuevo</h1>
-        <p>Ingresa con tu número de teléfono para consultar y gestionar tus citas.</p>
+        <p>Ingresa con el correo de tu cuenta SIDRO para consultar y gestionar tus citas.</p>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-field">
-          <label for="telefono">Número de teléfono</label>
+          <label for="email">Correo electrónico</label>
           <div class="input-shell">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 4.5 10 8 8 9.5a14 14 0 0 0 6.5 6.5l1.5-2 3.5 1.7v2.4c0 1-.8 1.8-1.8 1.8C10.2 19.2 4.8 13.8 4.1 6.3c-.1-1 .7-1.8 1.7-1.8h2.5Z"/></svg>
-            <input id="telefono" type="tel" inputmode="numeric" autocomplete="tel" formControlName="telefono" placeholder="099 999 9999" aria-describedby="telefono-error">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
+            <input id="email" type="email" inputmode="email" autocomplete="email" formControlName="email" placeholder="nombre@correo.com" aria-describedby="email-error">
           </div>
-          <p id="telefono-error" class="field-error" *ngIf="loginForm.get('telefono')?.touched && loginForm.get('telefono')?.invalid">
-            Ingresa un número celular válido de 10 dígitos.
+          <p id="email-error" class="field-error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+            Ingresa un correo electrónico válido.
           </p>
         </div>
 
@@ -53,13 +53,22 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 19 7v5c0 4.4-3 7.1-7 8.5C8 19.1 5 16.4 5 12V7l7-3.5Z"/><path d="m9 12 2 2 4-4"/></svg>
             Acceso protegido
           </span>
-          <a class="forgot-link" routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
+          <a class="forgot-link" routerLink="/forgot-password" [queryParams]="{ email: loginForm.get('email')?.value }">¿Olvidaste tu contraseña?</a>
         </div>
 
         <div *ngIf="errorMessage" class="login-alert" role="alert">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></svg>
           <p>{{ errorMessage }}</p>
         </div>
+
+        <a
+          *ngIf="showRecoveryPrompt"
+          class="recovery-action"
+          routerLink="/forgot-password"
+          [queryParams]="{ email: loginForm.get('email')?.value }">
+          ¿No recuerdas tu contraseña? Recupérala por correo
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
 
         <button type="submit" class="login-submit" [disabled]="isLoading">
           <span *ngIf="isLoading" class="button-spinner" aria-hidden="true"></span>

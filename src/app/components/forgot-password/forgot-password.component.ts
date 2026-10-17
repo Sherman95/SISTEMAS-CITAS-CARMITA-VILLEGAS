@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { VisualAssetsService } from '../../services/visual-assets.service';
 
@@ -15,6 +15,7 @@ import { VisualAssetsService } from '../../services/visual-assets.service';
 export class ForgotPasswordComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
 
   readonly visuals = inject(VisualAssetsService).assets;
   readonly form = this.fb.group({
@@ -24,6 +25,11 @@ export class ForgotPasswordComponent {
   isLoading = false;
   successMessage = '';
   errorMessage = '';
+
+  constructor() {
+    const email = (this.route.snapshot.queryParamMap.get('email') || '').trim().toLowerCase();
+    if (email) this.form.controls.email.setValue(email);
+  }
 
   onSubmit(): void {
     if (this.form.invalid) {
