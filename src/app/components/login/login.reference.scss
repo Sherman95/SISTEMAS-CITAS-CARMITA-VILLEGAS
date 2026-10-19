@@ -135,6 +135,9 @@ form { display: grid; gap: 1.12rem; min-width: 0; width: 100%; }
 .forgot-link { color: #7a1839; font-size: .64rem; font-weight: 820; text-align: right; text-decoration: none; }
 .forgot-link:hover { text-decoration: underline; }
 
+.legacy-login-toggle { background: transparent; border: 0; color: #7a1839; cursor: pointer; display: block; font: inherit; font-size: .72rem; font-weight: 760; margin: .9rem auto 0; padding: .35rem; text-decoration: underline; }
+.legacy-login-help { color: #806b73; font-size: .68rem; line-height: 1.5; margin: .45rem auto 0; max-width: 28rem; text-align: center; }
+
 .login-alert { align-items: flex-start; background: #fff0f1; border: 1px solid #f2cdd2; border-radius: 13px; color: var(--error); display: flex; gap: .6rem; padding: .75rem .85rem; }
 .login-alert svg { flex: 0 0 auto; height: 18px; width: 18px; }
 .login-alert p { font-size: .68rem; line-height: 1.45; margin: 0; }

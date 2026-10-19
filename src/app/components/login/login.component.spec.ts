@@ -31,7 +31,7 @@ describe('LoginComponent', () => {
   });
 
   it('uses email and password as login credentials', () => {
-    component.loginForm.setValue({ email: 'CLIENTA@EXAMPLE.COM ', password: 'secret123' });
+    component.loginForm.setValue({ email: 'CLIENTA@EXAMPLE.COM ', telefono: '', password: 'secret123' });
 
     component.onSubmit();
 
@@ -42,7 +42,7 @@ describe('LoginComponent', () => {
   });
 
   it('offers password recovery after invalid credentials', () => {
-    component.loginForm.setValue({ email: 'clienta@example.com', password: 'incorrecta' });
+    component.loginForm.setValue({ email: 'clienta@example.com', telefono: '', password: 'incorrecta' });
 
     component.onSubmit();
 

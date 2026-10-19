@@ -1,9 +1,10 @@
 ﻿import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { VisualAssetsService } from '../../services/visual-assets.service';
+import { safeReturnUrl } from '../../utils/safe-return-url';
 
 @Component({
   selector: 'app-login',
@@ -17,17 +18,37 @@ export class LoginComponent {
   isLoading = false;
   errorMessage = '';
   showRecoveryPrompt = false;
+  legacyMode = false;
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   readonly visuals = inject(VisualAssetsService).assets;
 
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(160)]],
+      telefono: [''],
       password: ['', Validators.required]
     });
+  }
+
+  toggleLegacyMode(): void {
+    this.legacyMode = !this.legacyMode;
+    this.errorMessage = '';
+    this.showRecoveryPrompt = false;
+    const email = this.loginForm.controls['email'];
+    const phone = this.loginForm.controls['telefono'];
+    if (this.legacyMode) {
+      email.clearValidators();
+      phone.setValidators([Validators.required, Validators.pattern('^(?:\\+?[0-9][0-9 .()-]{7,18})$')]);
+    } else {
+      phone.clearValidators();
+      email.setValidators([Validators.required, Validators.email, Validators.maxLength(160)]);
+    }
+    email.updateValueAndValidity();
+    phone.updateValueAndValidity();
   }
 
   onSubmit() {
@@ -43,23 +64,25 @@ export class LoginComponent {
     this.errorMessage = '';
     this.showRecoveryPrompt = false;
 
-    const email = normalizedEmail;
     const password = this.loginForm.value.password;
+    const request$ = this.legacyMode
+      ? this.authService.legacyLogin(String(this.loginForm.value.telefono || '').trim(), password)
+      : this.authService.login(normalizedEmail, password);
 
-    this.authService.login(email, password).subscribe({
+    request$.subscribe({
       next: (res) => {
         this.isLoading = false;
         // Se define y almacena el token en memoria para evitar XSS temporalmente,
         // hasta que el usuario apruebe el almacenamiento definitivo (e.g. IndexedDB o HTTPOnly Cookies en backend).
         this.authService.setToken(res.token);
-        this.router.navigate(['/dashboard']);
+        this.router.navigateByUrl(safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl')));
       },
       error: (err) => {
         this.isLoading = false;
-        this.showRecoveryPrompt = err.status === 401 || err.status === 403;
+        this.showRecoveryPrompt = !this.legacyMode && (err.status === 401 || err.status === 403);
         this.errorMessage = this.showRecoveryPrompt
           ? 'El correo o la contraseña no coinciden.'
-          : err.error?.error || 'No pudimos iniciar sesión en este momento.';
+          : err.error?.error || (this.legacyMode ? 'El WhatsApp o la contraseña no coinciden.' : 'No pudimos iniciar sesión en este momento.');
       }
     });
   }

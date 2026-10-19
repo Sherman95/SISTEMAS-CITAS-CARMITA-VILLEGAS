@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BookingService, SidroProfessional, SidroService } from '../../services/booking.service';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { NotificationsBellComponent } from '../notifications-bell/notifications-bell.component';
 import { VisualAssetsService } from '../../services/visual-assets.service';
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, MobileNavComponent],
+  imports: [CommonModule, FormsModule, RouterLink, MobileNavComponent, NotificationsBellComponent],
   templateUrl: './booking.view.html',
   styleUrls: ['./booking.view.scss', './booking.luxury-extension.scss']
 })

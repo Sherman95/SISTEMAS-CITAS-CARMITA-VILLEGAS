@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { BookingComponent } from './booking.component';
@@ -33,6 +35,8 @@ describe('BookingComponent', () => {
       imports: [BookingComponent],
       providers: [
         { provide: BookingService, useValue: bookingService },
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([])
       ]
     }).compileComponents();

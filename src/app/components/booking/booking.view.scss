@@ -13,6 +13,12 @@
   margin-bottom: 2.5rem;
 }
 
+.topbar-actions {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
 .close-link {
   align-items: center;
   background: var(--surface);

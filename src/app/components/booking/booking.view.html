@@ -4,9 +4,12 @@
       <span class="brand-mark" aria-hidden="true"><img [src]="visuals.brandLogo" alt=""></span>
       <span class="brand-copy"><strong>Carmita Villegas</strong><small>Estilistas · SIDRO</small></span>
     </a>
-    <a class="close-link" routerLink="/dashboard" aria-label="Cerrar reserva">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
-    </a>
+    <div class="topbar-actions">
+      <app-notifications-bell></app-notifications-bell>
+      <a class="close-link" routerLink="/dashboard" aria-label="Cerrar reserva">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </a>
+    </div>
   </header>
 
   <main class="booking-content">

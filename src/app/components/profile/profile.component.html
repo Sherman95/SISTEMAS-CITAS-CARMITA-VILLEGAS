@@ -4,6 +4,7 @@
       <span class="brand-mark" aria-hidden="true"><img [src]="visuals.brandLogo" alt=""></span>
       <span class="brand-copy"><strong>Carmita Villegas</strong><small>Estilistas · SIDRO</small></span>
     </a>
+    <app-notifications-bell></app-notifications-bell>
   </header>
 
   <main class="profile-content">
@@ -49,12 +50,20 @@
             <dd>{{ profile.nombre_completo }}</dd>
           </div>
           <div>
-            <dt>Número de teléfono</dt>
+            <dt>WhatsApp</dt>
             <dd>{{ profile.telefono }}</dd>
           </div>
           <div *ngIf="profile.email">
             <dt>Correo electrónico</dt>
             <dd>{{ profile.email }}</dd>
+          </div>
+          <div *ngIf="profile.documento">
+            <dt>Cédula / RUC</dt>
+            <dd>{{ profile.documento }}</dd>
+          </div>
+          <div *ngIf="profile.direccion">
+            <dt>Dirección</dt>
+            <dd>{{ profile.direccion }}</dd>
           </div>
           <div>
             <dt>Estado de vinculación</dt>
@@ -64,15 +73,75 @@
           </div>
         </dl>
 
-        <section class="recovery-email-panel" aria-labelledby="recovery-email-title">
+        <section class="recovery-email-panel complete-data-panel" aria-labelledby="complete-data-title" *ngIf="missingProfileData">
           <div class="recovery-email-heading">
             <div>
-              <span class="eyebrow">Recuperación de acceso</span>
-              <h3 id="recovery-email-title">{{ profile.email ? 'Actualiza tu correo' : 'Agrega un correo' }}</h3>
+              <span class="eyebrow">Completa tu perfil</span>
+              <h3 id="complete-data-title">Completa tus datos</h3>
             </div>
-            <span class="email-status" [class.ready]="profile.email">{{ profile.email ? 'Configurado' : 'Pendiente' }}</span>
           </div>
-          <p>Lo usaremos únicamente para enviarte un enlace si olvidas tu contraseña.</p>
+          <p>Completa tus datos para facilitar tus próximas reservas y la atención en el salón.</p>
+          <form [formGroup]="completeDataForm" (ngSubmit)="saveCompleteData()" novalidate>
+            <div class="recovery-field" *ngIf="!profile.documento">
+              <label for="profile-documento">Cédula / RUC</label>
+              <input id="profile-documento" type="text" inputmode="numeric" autocomplete="off" formControlName="documento" placeholder="1710034065" maxlength="13">
+              <small *ngIf="!documentError">Validamos el formato y el dígito verificador. Si es un RUC, su verificación oficial con el SRI se realiza en el salón.</small>
+              <small *ngIf="documentError">{{ documentError }}</small>
+            </div>
+            <div class="recovery-field" *ngIf="!profile.direccion">
+              <label for="profile-direccion">Dirección</label>
+              <input id="profile-direccion" type="text" autocomplete="street-address" formControlName="direccion" placeholder="Av. Principal 123 y calle secundaria">
+              <small>Mínimo 5 caracteres.</small>
+            </div>
+            <p *ngIf="completeDataMessage" class="form-message success" role="status">{{ completeDataMessage }}</p>
+            <p *ngIf="completeDataError" class="form-message error" role="alert">{{ completeDataError }}</p>
+            <button type="submit" class="btn-primary recovery-save" [disabled]="isSavingCompleteData">
+              {{ isSavingCompleteData ? 'Guardando...' : 'Guardar datos' }}
+            </button>
+          </form>
+        </section>
+
+        <div class="account-settings-heading">
+          <div><span class="eyebrow">Ajustes</span><h3>Administra tu cuenta</h3></div>
+          <p>Abre únicamente la opción que necesites.</p>
+        </div>
+
+        <div class="profile-settings-list">
+        <details class="profile-settings-group">
+          <summary>
+            <span class="settings-symbol" aria-hidden="true">✦</span>
+            <span class="settings-summary-copy"><small>Avisos en este dispositivo</small><strong>Notificaciones</strong></span>
+            <span class="email-status" [class.ready]="pushNotifications.state() === 'enabled'">
+              {{ pushNotifications.state() === 'enabled' ? 'Activas' : (pushNotifications.state() === 'loading' ? 'Revisando' : 'Desactivadas') }}
+            </span>
+            <span class="settings-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="settings-panel-body profile-push-panel">
+            <p *ngIf="pushNotifications.state() === 'loading'">Comprobando este dispositivo...</p>
+            <p *ngIf="pushNotifications.state() === 'enabled'">Recibirás avisos de propuestas, confirmaciones, rechazos y cancelaciones aunque SIDRO no esté en primer plano.</p>
+            <p *ngIf="pushNotifications.state() === 'prompt' || pushNotifications.state() === 'error'">Activa los avisos de citas en este dispositivo. El navegador solicitará permiso una sola vez.</p>
+            <p *ngIf="pushNotifications.state() === 'denied'">El permiso está bloqueado. Habilítalo desde los ajustes del navegador.</p>
+            <p *ngIf="pushNotifications.state() === 'unsupported'">Web Push no está disponible en esta ejecución. Tus notificaciones internas siguen funcionando.</p>
+            <p *ngIf="pushNotifications.state() === 'unavailable'">El servidor todavía no tiene habilitado Web Push.</p>
+            <div *ngIf="pushNotifications.isIos && !pushNotifications.isStandalone" class="profile-push-help">En iPhone, agrega SIDRO a la pantalla de inicio y ábrelo desde su icono.</div>
+            <p *ngIf="pushNotifications.message()" class="form-message" [class.error]="pushNotifications.state() === 'error' || pushNotifications.state() === 'denied'" role="status">{{ pushNotifications.message() }}</p>
+            <div class="profile-push-actions">
+              <button *ngIf="pushNotifications.state() === 'prompt' || pushNotifications.state() === 'error'" type="button" class="btn-primary" [disabled]="pushNotifications.busy() || (pushNotifications.isIos && !pushNotifications.isStandalone)" (click)="pushNotifications.enable()">{{ pushNotifications.busy() ? 'Activando...' : 'Activar notificaciones' }}</button>
+              <button *ngIf="pushNotifications.state() === 'enabled'" type="button" class="btn-secondary" [disabled]="pushNotifications.busy()" (click)="pushNotifications.disable()">Desactivar en este dispositivo</button>
+            </div>
+          </div>
+        </details>
+
+        <details class="profile-settings-group">
+          <summary>
+            <span class="settings-symbol" aria-hidden="true">&#64;</span>
+            <span class="settings-summary-copy"><small>Recuperación de acceso</small><strong>{{ profile.email ? 'Correo y acceso' : 'Agregar correo' }}</strong></span>
+            <span class="email-status" [class.ready]="profile.email_verified">{{ profile.email_verified ? 'Verificado' : 'Pendiente' }}</span>
+            <span class="settings-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="settings-panel-body">
+          <p>Es tu credencial de acceso y recuperación. El correo principal no cambiará hasta que confirmes el enlace enviado a la nueva dirección.</p>
+          <p *ngIf="profile.pending_email" class="pending-email">Verificación pendiente: <strong>{{ profile.pending_email }}</strong></p>
           <form [formGroup]="recoveryEmailForm" (ngSubmit)="saveRecoveryEmail()" novalidate>
             <div class="recovery-field">
               <label for="recovery-email">Correo electrónico</label>
@@ -87,10 +156,50 @@
             <p *ngIf="emailSuccessMessage" class="form-message success" role="status">{{ emailSuccessMessage }}</p>
             <p *ngIf="emailErrorMessage" class="form-message error" role="alert">{{ emailErrorMessage }}</p>
             <button type="submit" class="btn-primary recovery-save" [disabled]="isSavingEmail">
-              {{ isSavingEmail ? 'Guardando...' : 'Guardar correo de recuperación' }}
+              {{ isSavingEmail ? 'Enviando verificación...' : (profile.email ? 'Verificar nuevo correo' : 'Agregar y verificar correo') }}
             </button>
           </form>
-        </section>
+          </div>
+        </details>
+
+        <details class="profile-settings-group">
+          <summary>
+            <span class="settings-symbol" aria-hidden="true">☎</span>
+            <span class="settings-summary-copy"><small>Contacto</small><strong>WhatsApp</strong></span>
+            <span class="settings-current-value">{{ profile.telefono }}</span>
+            <span class="settings-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="settings-panel-body">
+          <p>Este número es solo de tu cuenta SIDRO. No modifica automáticamente tu ficha histórica ni la vinculación del POS.</p>
+          <form [formGroup]="whatsappForm" (ngSubmit)="saveWhatsapp()" novalidate>
+            <div class="recovery-field"><label for="profile-whatsapp">WhatsApp</label><input id="profile-whatsapp" type="tel" inputmode="tel" autocomplete="tel" formControlName="whatsapp" placeholder="+593 99 123 4567"><small *ngIf="whatsappForm.controls.whatsapp.touched && whatsappForm.controls.whatsapp.invalid">Ingresa un número ecuatoriano o internacional válido.</small></div>
+            <div class="recovery-field" *ngIf="profile.legacy_account"><label for="whatsapp-password">Contraseña actual</label><input id="whatsapp-password" type="password" autocomplete="current-password" formControlName="current_password" placeholder="Obligatoria para cuentas antiguas"></div>
+            <p *ngIf="whatsappMessage" class="form-message success" role="status">{{ whatsappMessage }}</p>
+            <p *ngIf="whatsappError" class="form-message error" role="alert">{{ whatsappError }}</p>
+            <button type="submit" class="btn-primary recovery-save" [disabled]="isSavingWhatsapp">{{ isSavingWhatsapp ? 'Guardando...' : 'Guardar WhatsApp' }}</button>
+          </form>
+          </div>
+        </details>
+
+        <details class="profile-settings-group">
+          <summary>
+            <span class="settings-symbol" aria-hidden="true">◆</span>
+            <span class="settings-summary-copy"><small>Seguridad</small><strong>Cambiar contraseña</strong></span>
+            <span class="settings-chevron" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="settings-panel-body">
+          <p>Al cambiarla se cerrarán las sesiones anteriores y deberás ingresar nuevamente.</p>
+          <form [formGroup]="passwordForm" (ngSubmit)="savePassword()" novalidate>
+            <div class="recovery-field"><label for="password-current">Contraseña actual</label><input id="password-current" type="password" autocomplete="current-password" formControlName="current_password"></div>
+            <div class="recovery-field"><label for="password-new">Nueva contraseña</label><input id="password-new" type="password" autocomplete="new-password" formControlName="new_password"><small>Mínimo 8 caracteres.</small></div>
+            <div class="recovery-field"><label for="password-confirm">Repite la nueva contraseña</label><input id="password-confirm" type="password" autocomplete="new-password" formControlName="confirmation"></div>
+            <p *ngIf="passwordMessage" class="form-message success" role="status">{{ passwordMessage }}</p>
+            <p *ngIf="passwordError" class="form-message error" role="alert">{{ passwordError }}</p>
+            <button type="submit" class="btn-primary recovery-save" [disabled]="isSavingPassword">{{ isSavingPassword ? 'Actualizando...' : 'Cambiar contraseña' }}</button>
+          </form>
+          </div>
+        </details>
+        </div>
 
         <div class="profile-note" *ngIf="!profile.linked">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>

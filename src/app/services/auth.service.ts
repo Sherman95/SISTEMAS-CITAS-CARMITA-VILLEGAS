@@ -9,12 +9,17 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/sidro`;
   
-  private memoryToken: string | null = null;
+  private readonly sessionTokenKey = 'sidro.session.token';
+  private memoryToken: string | null = this.readSessionToken();
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password });
+  }
+
+  legacyLogin(telefono: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login/legacy`, { telefono, password });
   }
 
   register(data: any): Observable<any> {
@@ -29,10 +34,28 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.apiUrl}/password/reset`, { token, password });
   }
 
-  updateRecoveryEmail(email: string, currentPassword: string): Observable<{ email: string; message: string }> {
-    return this.http.put<{ email: string; message: string }>(`${this.apiUrl}/profile/recovery-email`, {
+  updateRecoveryEmail(email: string, currentPassword: string): Observable<{ pending_email: string; message: string }> {
+    return this.http.put<{ pending_email: string; message: string }>(`${this.apiUrl}/profile/recovery-email`, {
       email,
       current_password: currentPassword
+    });
+  }
+
+  verifyEmail(token: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/email/verify`, { token });
+  }
+
+  updateWhatsapp(whatsapp: string, currentPassword = ''): Observable<{ whatsapp: string; message: string }> {
+    return this.http.put<{ whatsapp: string; message: string }>(`${this.apiUrl}/profile/whatsapp`, {
+      whatsapp,
+      current_password: currentPassword
+    });
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/profile/change-password`, {
+      current_password: currentPassword,
+      new_password: newPassword
     });
   }
 
@@ -40,8 +63,19 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/profile`);
   }
 
+  completeProfileData(data: {
+    documento?: string;
+    direccion?: string;
+  }): Observable<{ message: string; documento: string | null; direccion: string | null; profile_complete: boolean }> {
+    return this.http.put<{ message: string; documento: string | null; direccion: string | null; profile_complete: boolean }>(
+      `${this.apiUrl}/profile/complete-data`,
+      data
+    );
+  }
+
   setToken(token: string) {
     this.memoryToken = token;
+    try { sessionStorage.setItem(this.sessionTokenKey, token); } catch { /* sesión en memoria */ }
   }
 
   getToken(): string | null {
@@ -53,6 +87,26 @@ export class AuthService {
   }
 
   logout() {
+    this.revokePushSubscription();
     this.memoryToken = null;
+    try { sessionStorage.removeItem(this.sessionTokenKey); } catch { /* sesión en memoria */ }
+  }
+
+  private readSessionToken(): string | null {
+    try { return sessionStorage.getItem(this.sessionTokenKey); } catch { return null; }
+  }
+
+  private revokePushSubscription(): void {
+    const token = this.getToken();
+    if (!token || !('serviceWorker' in navigator)) return;
+    void navigator.serviceWorker.getRegistration().then((registration) => registration?.pushManager.getSubscription())
+      .then((subscription) => {
+        if (!subscription) return;
+        return fetch(`${this.apiUrl}/notifications/subscriptions`, {
+          method: 'DELETE', keepalive: true,
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ endpoint: subscription.endpoint })
+        }).finally(() => subscription.unsubscribe());
+      }).catch(() => undefined);
   }
 }

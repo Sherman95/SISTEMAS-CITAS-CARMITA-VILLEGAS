@@ -24,11 +24,11 @@
       <div class="login-intro">
         <span>Tu espacio personal</span>
         <h1 id="login-title">Bienvenida<br>de nuevo</h1>
-        <p>Ingresa con el correo de tu cuenta SIDRO para consultar y gestionar tus citas.</p>
+        <p>{{ legacyMode ? 'Acceso temporal para cuentas antiguas que todavía no tienen correo.' : 'Ingresa con el correo de tu cuenta SIDRO para consultar y gestionar tus citas.' }}</p>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-        <div class="form-field">
+        <div class="form-field" *ngIf="!legacyMode">
           <label for="email">Correo electrónico</label>
           <div class="input-shell">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
@@ -37,6 +37,15 @@
           <p id="email-error" class="field-error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
             Ingresa un correo electrónico válido.
           </p>
+        </div>
+
+        <div class="form-field" *ngIf="legacyMode">
+          <label for="telefono">WhatsApp de la cuenta antigua</label>
+          <div class="input-shell">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h3l1.5 4-2 1.5a14 14 0 0 0 6 6l1.5-2L21 14v3a3 3 0 0 1-3 3C10.3 19.5 4.5 13.7 4 6a3 3 0 0 1 3-3Z"/></svg>
+            <input id="telefono" type="tel" inputmode="tel" autocomplete="tel" formControlName="telefono" placeholder="099 123 4567">
+          </div>
+          <p class="field-error" *ngIf="loginForm.get('telefono')?.touched && loginForm.get('telefono')?.invalid">Ingresa el WhatsApp registrado.</p>
         </div>
 
         <div class="form-field">
@@ -53,7 +62,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 19 7v5c0 4.4-3 7.1-7 8.5C8 19.1 5 16.4 5 12V7l7-3.5Z"/><path d="m9 12 2 2 4-4"/></svg>
             Acceso protegido
           </span>
-          <a class="forgot-link" routerLink="/forgot-password" [queryParams]="{ email: loginForm.get('email')?.value }">¿Olvidaste tu contraseña?</a>
+          <a *ngIf="!legacyMode" class="forgot-link" routerLink="/forgot-password" [queryParams]="{ email: loginForm.get('email')?.value }">¿Olvidaste tu contraseña?</a>
         </div>
 
         <div *ngIf="errorMessage" class="login-alert" role="alert">
@@ -75,6 +84,11 @@
           <span>{{ isLoading ? 'Verificando...' : 'Entrar a mi cuenta' }}</span>
           <svg *ngIf="!isLoading" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
+
+        <button type="button" class="legacy-login-toggle" (click)="toggleLegacyMode()">
+          {{ legacyMode ? 'Ingresar con correo' : '¿Tu cuenta antigua aún no tiene correo?' }}
+        </button>
+        <p *ngIf="legacyMode" class="legacy-login-help">Este acceso solo funciona si tu cuenta SIDRO no tiene un correo registrado. Si olvidaste también la contraseña, el salón deberá validar tu identidad de forma asistida.</p>
       </form>
 
       <footer class="login-footer">

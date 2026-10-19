@@ -4,13 +4,14 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { NotificationsBellComponent } from '../notifications-bell/notifications-bell.component';
 import { BookingService, SidroService } from '../../services/booking.service';
 import { VisualAssetsService } from '../../services/visual-assets.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MobileNavComponent],
+  imports: [CommonModule, RouterLink, MobileNavComponent, NotificationsBellComponent],
   templateUrl: './dashboard.reference.html',
   styleUrls: ['./dashboard.reference.scss', './dashboard.mobile-fixes.scss']
 })

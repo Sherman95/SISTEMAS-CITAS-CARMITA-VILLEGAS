@@ -47,9 +47,16 @@ export class ForgotPasswordComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = error.status === 429
-          ? 'Has realizado varios intentos. Espera unos minutos antes de volver a solicitar el enlace.'
-          : error.error?.error || 'No pudimos procesar la solicitud en este momento.';
+        const apiMessage = typeof error?.error?.error === 'string' ? error.error.error : '';
+        if (error.status === 429) {
+          this.errorMessage = 'Has realizado varios intentos. Espera unos minutos antes de volver a solicitar el enlace.';
+        } else if (error.status === 0) {
+          this.errorMessage = 'No pudimos comunicarnos con el servidor. Comprueba que el backend esté encendido e inténtalo nuevamente.';
+        } else if (apiMessage) {
+          this.errorMessage = apiMessage;
+        } else {
+          this.errorMessage = 'El servidor devolvió una respuesta inválida. Comprueba la configuración de la API e inténtalo nuevamente.';
+        }
       }
     });
   }

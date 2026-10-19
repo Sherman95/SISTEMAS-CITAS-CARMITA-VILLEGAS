@@ -37,3 +37,135 @@
   .link-status { align-self: center; grid-column: auto; margin-top: .9rem; }
   .profile-details { border-radius: 22px; }
 }
+
+/* Compact account settings: each sensitive form opens only when requested. */
+.account-settings-heading {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 1.35rem;
+}
+
+.account-settings-heading h3 {
+  color: #3b202c;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  margin: .1rem 0 0;
+}
+
+.account-settings-heading p {
+  color: var(--text-secondary);
+  font-size: .7rem;
+  margin: 0;
+  text-align: right;
+}
+
+.profile-settings-list {
+  border: 1px solid rgba(117,74,88,.14);
+  border-radius: 18px;
+  margin-top: .75rem;
+  overflow: hidden;
+}
+
+.profile-settings-group {
+  background: rgba(251,247,245,.8);
+  border-bottom: 1px solid rgba(117,74,88,.12);
+}
+
+.profile-settings-group:last-child { border-bottom: 0; }
+
+.profile-settings-group summary {
+  align-items: center;
+  cursor: pointer;
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: 42px minmax(0,1fr) auto 18px;
+  list-style: none;
+  min-height: 70px;
+  padding: .75rem .9rem;
+  transition: background-color .2s ease;
+}
+
+.profile-settings-group summary::-webkit-details-marker { display: none; }
+.profile-settings-group summary:hover { background: rgba(255,255,255,.76); }
+.profile-settings-group summary:focus-visible { outline: 3px solid rgba(130,31,67,.18); outline-offset: -3px; }
+.profile-settings-group[open] summary { background: #fff; }
+
+.settings-symbol {
+  align-items: center;
+  background: #f2dfe6;
+  border-radius: 13px;
+  color: #77264c;
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.settings-summary-copy { display: grid; gap: .12rem; min-width: 0; }
+.settings-summary-copy small { color: #9b7485; font-size: .62rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.settings-summary-copy strong { color: #40202f; font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.settings-current-value { color: #7e6571; font-size: .72rem; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.settings-chevron { color: #8d6277; font-size: 1.05rem; transform-origin: center; transition: transform .2s ease; }
+.profile-settings-group[open] .settings-chevron { transform: rotate(180deg); }
+
+.settings-panel-body {
+  background: #fff;
+  border-top: 1px solid rgba(117,74,88,.1);
+  padding: 1rem;
+}
+
+.settings-panel-body > p { color: var(--text-secondary); font-size: .72rem; line-height: 1.5; margin: 0 0 1rem; }
+.settings-panel-body form { display: grid; gap: .8rem; }
+.profile-push-panel { display: grid; gap: .8rem; }
+.profile-push-panel > p { margin: 0; }
+.profile-push-help { background: #f7edf2; border-radius: 12px; color: #684356; font-size: .72rem; line-height: 1.45; padding: .7rem .8rem; }
+.profile-push-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+.profile-push-actions button { min-height: 44px; }
+
+@media (min-width: 761px) {
+  .profile-identity { min-height: 315px; }
+  .details-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .details-list > div { display: block; min-width: 0; padding: .85rem .65rem; }
+  .details-list > div:nth-child(odd) { padding-left: 0; }
+  .details-list > div:nth-child(even) { border-left: 1px solid var(--border); padding-right: 0; }
+  .details-list dd { margin-top: .25rem; }
+}
+
+@media (max-width: 760px) {
+  .profile-content { padding-bottom: 5.5rem; }
+  .profile-identity { min-height: 230px; }
+}
+
+@media (max-width: 520px) {
+  .page-header p { font-size: .78rem; }
+  .profile-identity {
+    align-items: center;
+    display: grid;
+    gap: .18rem .8rem;
+    grid-template-columns: 64px minmax(0,1fr);
+    justify-content: initial;
+    min-height: 0;
+    padding: 1rem;
+    text-align: left;
+  }
+  .identity-cover { opacity: .62; }
+  .profile-avatar { grid-row: 1 / span 2; height: 64px; margin: 0; width: 64px; }
+  .profile-identity h2 { align-self: end; font-size: 1.3rem; }
+  .account-type { align-self: start; }
+  .link-status { align-self: auto; grid-column: 1 / -1; justify-self: start; margin-top: .7rem; }
+  .profile-details { padding: 1rem; }
+  .details-list > div { min-height: 0; padding: .7rem 0; }
+  .account-settings-heading { align-items: start; display: block; }
+  .account-settings-heading p { margin-top: .2rem; text-align: left; }
+  .profile-settings-group summary { gap: .6rem; grid-template-columns: 40px minmax(0,1fr) auto 14px; min-height: 64px; padding: .65rem .7rem; }
+  .settings-symbol { height: 40px; width: 40px; }
+  .settings-current-value { display: none; }
+  .email-status { font-size: .56rem; padding: .3rem .42rem; }
+  .settings-panel-body { padding: .85rem .75rem 1rem; }
+  .profile-push-actions button { width: 100%; }
+}

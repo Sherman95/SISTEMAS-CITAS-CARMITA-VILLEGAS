@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { MyRequestsComponent } from './my-requests.component';
 import { BookingService, SidroRequest } from '../../services/booking.service';
@@ -26,15 +28,24 @@ describe('MyRequestsComponent', () => {
     bookingService = jasmine.createSpyObj<BookingService>('BookingService', [
       'getMyRequests',
       'acceptProposal',
-      'rejectProposal'
+      'rejectProposal',
+      'getWhatsappContact'
     ]);
     bookingService.getMyRequests.and.returnValue(of([proposal]));
     bookingService.acceptProposal.and.returnValue(of({ message: 'ok' }));
     bookingService.rejectProposal.and.returnValue(of({ message: 'ok' }));
+    bookingService.getWhatsappContact.and.returnValue(
+      of({ enabled: false, whatsapp: null, message: null })
+    );
 
     await TestBed.configureTestingModule({
       imports: [MyRequestsComponent],
-      providers: [{ provide: BookingService, useValue: bookingService }, provideRouter([])]
+      providers: [
+        { provide: BookingService, useValue: bookingService },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([])
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MyRequestsComponent);
@@ -59,5 +70,29 @@ describe('MyRequestsComponent', () => {
 
     expect(bookingService.rejectProposal).toHaveBeenCalledWith(7);
     expect(bookingService.getMyRequests).toHaveBeenCalledTimes(2);
+  });
+
+  it('highlights the request indicated by the open query param', async () => {
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [MyRequestsComponent],
+      providers: [
+        { provide: BookingService, useValue: bookingService },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParamMap: convertToParamMap({ open: '7' }) } }
+        }
+      ]
+    }).compileComponents();
+
+    const deepFixture = TestBed.createComponent(MyRequestsComponent);
+    deepFixture.detectChanges();
+
+    expect(deepFixture.componentInstance.highlightedRequestId).toBe(7);
+    const element = deepFixture.nativeElement as HTMLElement;
+    expect(element.querySelector('#sidro-request-7')?.classList.contains('highlighted-request')).toBeTrue();
   });
 });

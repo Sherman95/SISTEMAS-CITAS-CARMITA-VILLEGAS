@@ -53,6 +53,12 @@ export interface SidroProfessional {
   nombre: string;
 }
 
+export interface SidroWhatsappContact {
+  enabled: boolean;
+  whatsapp: string | null;
+  message: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,6 +94,10 @@ export class BookingService {
 
   createRequest(reqData: SidroRequest) {
     return this.http.post<SidroRequest>(`${this.apiUrl}/sidro/requests`, reqData);
+  }
+
+  getWhatsappContact() {
+    return this.http.get<SidroWhatsappContact>(`${this.apiUrl}/sidro/public/whatsapp`);
   }
 
   getMyRequests() {

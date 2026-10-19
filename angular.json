@@ -59,6 +59,28 @@
               "outputHashing": "all",
               "serviceWorker": "ngsw-config.json"
             },
+            "local-production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local-production.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "10kB",
+                  "maximumError": "14kB"
+                }
+              ],
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -72,6 +94,9 @@
           "configurations": {
             "production": {
               "buildTarget": "sidro-frontend:build:production"
+            },
+            "local-production": {
+              "buildTarget": "sidro-frontend:build:local-production"
             },
             "development": {
               "buildTarget": "sidro-frontend:build:development"

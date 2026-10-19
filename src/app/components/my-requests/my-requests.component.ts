@@ -1,14 +1,16 @@
 ﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookingService, SidroRequest } from '../../services/booking.service';
+import { BookingService, SidroRequest, SidroWhatsappContact } from '../../services/booking.service';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
-import { RouterLink } from '@angular/router';
+import { NotificationsBellComponent } from '../notifications-bell/notifications-bell.component';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { VisualAssetsService } from '../../services/visual-assets.service';
+import { buildWhatsappLink, SALON_WHATSAPP_FALLBACK_MESSAGE } from '../../utils/whatsapp-link';
 
 @Component({
   selector: 'app-my-requests',
   standalone: true,
-  imports: [CommonModule, RouterLink, MobileNavComponent],
+  imports: [CommonModule, RouterLink, MobileNavComponent, NotificationsBellComponent],
   templateUrl: './my-requests.view.html',
   styleUrls: ['./my-requests.view.scss', './my-requests.luxury-extension.scss']
 })
@@ -19,13 +21,38 @@ export class MyRequestsComponent implements OnInit {
   successMessage = '';
   requests: SidroRequest[] = [];
   filter: 'ALL' | 'ACTIVE' | 'COMPLETED' = 'ALL';
+  salonContact: SidroWhatsappContact | null = null;
+  highlightedRequestId: number | null = null;
   
   private bookingService = inject(BookingService);
+  private route = inject(ActivatedRoute);
   readonly visualAssets = inject(VisualAssetsService);
   readonly visuals = this.visualAssets.assets;
 
   ngOnInit() {
+    const openParam = Number(this.route.snapshot.queryParamMap.get('open'));
+    this.highlightedRequestId = Number.isSafeInteger(openParam) && openParam > 0 ? openParam : null;
     this.loadRequests();
+    this.loadSalonContact();
+  }
+
+  get salonWhatsappLink(): string | null {
+    if (!this.salonContact?.enabled || !this.salonContact.whatsapp) return null;
+    return buildWhatsappLink(
+      this.salonContact.whatsapp,
+      this.salonContact.message || SALON_WHATSAPP_FALLBACK_MESSAGE
+    );
+  }
+
+  loadSalonContact() {
+    this.bookingService.getWhatsappContact().subscribe({
+      next: (contact) => {
+        this.salonContact = contact;
+      },
+      error: () => {
+        this.salonContact = null;
+      }
+    });
   }
 
   get filteredRequests(): SidroRequest[] {
@@ -54,6 +81,7 @@ export class MyRequestsComponent implements OnInit {
            this.requests = data;
            this.actionRequestId = null;
            this.isLoading = false;
+           this.revealHighlightedRequest();
        },
        error: (err) => {
            console.error(err);
@@ -133,6 +161,18 @@ export class MyRequestsComponent implements OnInit {
 
   formatTime(value: string | null | undefined): string {
     return value?.slice(0, 5) || '--:--';
+  }
+
+  private revealHighlightedRequest(): void {
+    if (!this.highlightedRequestId) return;
+    const target = this.requests.find((request) => request.id === this.highlightedRequestId);
+    if (!target) return;
+    this.filter = 'ALL';
+    setTimeout(() => {
+      document
+        .getElementById(`sidro-request-${this.highlightedRequestId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   }
 
   getRequestImage(request: SidroRequest, index = 0): string {

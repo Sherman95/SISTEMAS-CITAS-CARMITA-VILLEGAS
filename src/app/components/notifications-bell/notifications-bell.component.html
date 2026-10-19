@@ -1,0 +1,101 @@
+<div class="bell-shell">
+  <button
+    #bellButton
+    type="button"
+    class="bell-button"
+    [class.has-unread]="unreadCount() > 0"
+    [attr.aria-expanded]="panelOpen()"
+    aria-haspopup="dialog"
+    [attr.aria-label]="unreadCount() > 0 ? 'Notificaciones, ' + unreadCount() + ' sin leer' : 'Notificaciones'"
+    (click)="togglePanel()"
+  >
+    <svg class="bell-glyph" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 10a6 6 0 0 1 12 0c0 4.1 1.1 5.6 1.9 6.4H4.1C4.9 15.6 6 14.1 6 10Z"/>
+      <path d="M10 19.2a2 2 0 0 0 4 0"/>
+    </svg>
+    <span *ngIf="unreadCount() > 0" class="bell-badge" aria-hidden="true">{{ unreadLabel }}</span>
+  </button>
+
+  <div *ngIf="panelOpen()" class="bell-backdrop" (click)="closePanel()" aria-hidden="true"></div>
+
+  <section
+    #panel
+    *ngIf="panelOpen()"
+    class="bell-panel"
+    role="dialog"
+    aria-label="Notificaciones"
+    tabindex="-1"
+  >
+    <header class="bell-panel-header">
+      <div class="bell-panel-title">
+        <span class="bell-eyebrow">Tu actividad</span>
+        <h2>
+          Notificaciones
+          <em *ngIf="unreadCount() > 0">{{ unreadLabel }} sin leer</em>
+        </h2>
+      </div>
+      <button type="button" class="bell-close" aria-label="Cerrar notificaciones" (click)="closePanel()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+
+    <div class="bell-filters" role="group" aria-label="Filtrar notificaciones">
+      <button type="button" [class.active]="filter() === 'all'" [attr.aria-pressed]="filter() === 'all'" (click)="setFilter('all')">Todas</button>
+      <button type="button" [class.active]="filter() === 'unread'" [attr.aria-pressed]="filter() === 'unread'" (click)="setFilter('unread')">
+        Sin leer <span *ngIf="unreadCount() > 0">{{ unreadLabel }}</span>
+      </button>
+    </div>
+
+    <div *ngIf="loading() && items().length === 0" class="bell-skeleton" role="status" aria-label="Cargando notificaciones">
+      <span class="skeleton-row" *ngFor="let row of [1, 2, 3]"></span>
+    </div>
+
+    <div *ngIf="!loading() && items().length === 0 && lastError()" class="bell-state bell-state-error" role="alert">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></svg>
+      <strong>No pudimos cargar tus notificaciones.</strong>
+      <span>Revisa tu conexión e inténtalo de nuevo.</span>
+      <button type="button" (click)="retry()">Reintentar</button>
+    </div>
+
+    <div *ngIf="!loading() && items().length === 0 && !lastError()" class="bell-state bell-state-empty" role="status">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+      <strong>Todo está al día.</strong>
+      <span>Tus novedades sobre reservas aparecerán aquí.</span>
+    </div>
+
+    <div *ngIf="visibleItems.length === 0 && items().length > 0" class="bell-state bell-state-empty">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+      <strong>No tienes notificaciones sin leer.</strong>
+      <span>Cambia a «Todas» para ver tu actividad reciente.</span>
+    </div>
+
+    <ul *ngIf="visibleItems.length > 0" class="bell-list">
+      <li *ngFor="let item of visibleItems; trackBy: trackById">
+        <button
+          type="button"
+          class="bell-item"
+          [class.unread]="!item.read_at"
+          (click)="openNotification(item)"
+        >
+          <span class="bell-item-icon" [ngSwitch]="iconFor(item.type)">
+            <svg *ngSwitchCase="'confirmed'" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.5"/></svg>
+            <svg *ngSwitchCase="'declined'" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M9.5 14.5l5 5M14.5 14.5l-5 5"/></svg>
+            <svg *ngSwitchCase="'created'" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4"/></svg>
+            <svg *ngSwitchCase="'proposal'" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg>
+            <svg *ngSwitchDefault viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          </span>
+          <span class="bell-item-copy">
+            <strong>{{ item.title }}</strong>
+            <span>{{ item.body }}</span>
+            <small>{{ formatWhen(item.created_at) }}</small>
+          </span>
+          <span *ngIf="!item.read_at" class="bell-item-dot" aria-hidden="true"></span>
+        </button>
+      </li>
+    </ul>
+
+    <p *ngIf="lastError() && items().length > 0" class="bell-inline-error" role="status">
+      No se pudieron actualizar. <button type="button" (click)="retry()">Reintentar</button>
+    </p>
+  </section>
+</div>
